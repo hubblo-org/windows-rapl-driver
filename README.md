@@ -23,3 +23,7 @@
 - https://doc.rust-lang.org/unstable-book/library-features/llvm-asm.html
 - https://elixir.bootlin.com/linux/latest/source/drivers/powercap
 - http://icl.cs.utk.edu/papi/docs/d4/d46/linux-powercap_8c_source.html
+
+Fichiers intéressants dans le noyau linux :
+- drivers/powercap/intel_rapl_msr.c
+- arch/x86:lib/msr_smp.c
