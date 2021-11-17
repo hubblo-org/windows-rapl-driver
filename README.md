@@ -1,5 +1,4 @@
 ## Sources
-
 - https://github.com/intel/powergov
 - https://community.intel.com/t5/Software-Tuning-Performance/RAPL-for-energy-measurement/td-p/919723
 - www.eecs.berkeley.edu/Pubs/TechRpts/2012/EECS-2012-168.pdf
@@ -23,6 +22,15 @@
 - https://doc.rust-lang.org/unstable-book/library-features/llvm-asm.html
 - https://elixir.bootlin.com/linux/latest/source/drivers/powercap
 - http://icl.cs.utk.edu/papi/docs/d4/d46/linux-powercap_8c_source.html
+- https://www.osr.com/getting-started-writing-windows-drivers/
+- http://woshub.com/how-to-sign-an-unsigned-driver-for-windows-7-x64/
+- https://www.electronicdesign.com/technologies/windows/article/21802026/how-to-write-windows-drivers
+- https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-readfile
+- https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-writefile
+- https://docs.microsoft.com/en-us/windows/win32/sync/synchronization-and-overlapped-input-and-output
+- https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea
+- https://docs.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/writing-a-very-small-kmdf--driver
+- https://docs.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/writing-your-first-driver
 
 Fichiers intéressants dans le noyau linux :
 - drivers/powercap/intel_rapl_msr.c
