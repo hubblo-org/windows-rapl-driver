@@ -45,9 +45,48 @@ uint8_t* cmd_to_buf(command_t *cmd, size_t *out_len)
 	return res;
 }
 
-command_t* make_initialization_request()
+command_t* make_power_units_request()
 {
 	command_t *cmd = new command_t{ 0, 0x606, 0, 0 };
+	response_cmd_t* response_cmd = new response_cmd_t{ 0, 0 };
+
+	response_cmd->len = sizeof(uint64_t);
+	response_cmd->data = new uint8_t[response_cmd->len];
+	memset(response_cmd->data, 0, response_cmd->len);
+
+	cmd->response = response_cmd;
+	return cmd;
+}
+
+command_t* make_package_power_limit_request()
+{
+	command_t *cmd = new command_t{ 0, 0x610, 0, 0 };
+	response_cmd_t* response_cmd = new response_cmd_t{ 0, 0 };
+
+	response_cmd->len = sizeof(uint64_t);
+	response_cmd->data = new uint8_t[response_cmd->len];
+	memset(response_cmd->data, 0, response_cmd->len);
+
+	cmd->response = response_cmd;
+	return cmd;
+}
+
+command_t* make_current_power_request()
+{
+	command_t *cmd = new command_t{ 0, 0x611, 0, 0 };
+	response_cmd_t* response_cmd = new response_cmd_t{ 0, 0 };
+
+	response_cmd->len = sizeof(uint64_t);
+	response_cmd->data = new uint8_t[response_cmd->len];
+	memset(response_cmd->data, 0, response_cmd->len);
+
+	cmd->response = response_cmd;
+	return cmd;
+}
+
+command_t* make_test_request()
+{
+	command_t *cmd = new command_t{ 0, 3, 0, 0 };
 	response_cmd_t* response_cmd = new response_cmd_t{ 0, 0 };
 
 	response_cmd->len = sizeof(uint64_t);

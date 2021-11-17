@@ -35,3 +35,12 @@
 Fichiers intéressants dans le noyau linux :
 - drivers/powercap/intel_rapl_msr.c
 - arch/x86:lib/msr_smp.c
+
+
+# Cross compilation MinGW
+
+Prérequis : 
+- x86_64-w64-mingw32-g++
+
+Compilation : 
+x86_64-w64-mingw32-g++ DriverLoader.cpp -o DriverLoader.exe
