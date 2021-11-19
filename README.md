@@ -31,6 +31,9 @@
 - https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea
 - https://docs.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/writing-a-very-small-kmdf--driver
 - https://docs.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/writing-your-first-driver
+- https://www.intel.com/content/www/us/en/developer/articles/tool/power-gadget.html#inpage-nav-12
+- https://github.com/Microsoft/Windows-driver-samples
+
 
 Fichiers intéressants dans le noyau linux :
 - drivers/powercap/intel_rapl_msr.c
@@ -39,8 +42,8 @@ Fichiers intéressants dans le noyau linux :
 
 # Cross compilation MinGW
 
-Prérequis : 
+Prérequis :
 - x86_64-w64-mingw32-g++
 
-Compilation : 
+Compilation :
 x86_64-w64-mingw32-g++ DriverLoader.cpp -o DriverLoader.exe
