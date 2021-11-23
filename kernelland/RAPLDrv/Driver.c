@@ -94,6 +94,11 @@ Return Value:
 
     TraceEvents(TRACE_LEVEL_INFORMATION, TRACE_DRIVER, "%!FUNC! Exit");
 
+    /* Assign driver callbacks */
+    DriverObject->DriverUnload = DriverUnload;
+    DriverObject->MajorFunction[IRP_MJ_CREATE] = DispatchCreate;
+    DriverObject->MajorFunction[IRP_MJ_CLOSE] = DispatchClose;
+
     RtlInitUnicodeString(&device_name, L"\\Device\\RAPLDriver");
     RtlInitUnicodeString(&sym_name, DEVICE_NAME);
     status = IoCreateDevice(DriverObject, 0, &device_name, FILE_DEVICE_UNKNOWN, 0, FALSE, &device_object);
@@ -171,4 +176,33 @@ Return Value:
     // Stop WPP Tracing
     //
     WPP_CLEANUP(WdfDriverWdmGetDriverObject((WDFDRIVER)DriverObject));
+}
+
+void DriverUnload(PDRIVER_OBJECT driver)
+{
+    UNICODE_STRING sym_name;
+
+    RtlInitUnicodeString(&sym_name, DEVICE_NAME);
+    IoDeleteSymbolicLink(&sym_name);
+    IoDeleteDevice(driver->DeviceObject);
+}
+
+NTSTATUS DispatchCreate(PDEVICE_OBJECT device, PIRP irp)
+{
+    DbgPrint("Creating driver %s... \n", device->DriverObject->DriverName);
+    irp->IoStatus.Status = STATUS_SUCCESS;
+    irp->IoStatus.Information = STATUS_SUCCESS;
+    IofCompleteRequest(irp, IO_NO_INCREMENT);
+
+    return STATUS_SUCCESS;
+}
+
+NTSTATUS DispatchClose(PDEVICE_OBJECT device, PIRP irp)
+{
+    DbgPrint("Closing driver %s... \n", device->DriverObject->DriverName);
+    irp->IoStatus.Status = STATUS_SUCCESS;
+    irp->IoStatus.Information = STATUS_SUCCESS;
+    IofCompleteRequest(irp, IO_NO_INCREMENT);
+
+    return STATUS_SUCCESS;
 }

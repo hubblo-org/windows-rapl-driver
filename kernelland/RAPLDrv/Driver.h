@@ -35,3 +35,7 @@ EVT_WDF_DRIVER_DEVICE_ADD RAPLDrvEvtDeviceAdd;
 EVT_WDF_OBJECT_CONTEXT_CLEANUP RAPLDrvEvtDriverContextCleanup;
 
 EXTERN_C_END
+
+void DriverUnload(PDRIVER_OBJECT driver);
+NTSTATUS DispatchCreate(PDEVICE_OBJECT device, PIRP irp);
+NTSTATUS DispatchClose(PDEVICE_OBJECT device, PIRP irp);
