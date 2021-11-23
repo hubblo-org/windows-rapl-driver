@@ -95,7 +95,7 @@ Return Value:
     TraceEvents(TRACE_LEVEL_INFORMATION, TRACE_DRIVER, "%!FUNC! Exit");
 
     RtlInitUnicodeString(&device_name, L"\\Device\\RAPLDriver");
-    RtlInitUnicodeString(&sym_name, L"\\DosDevices\\RAPLDriver");
+    RtlInitUnicodeString(&sym_name, DEVICE_NAME);
     status = IoCreateDevice(DriverObject, 0, &device_name, FILE_DEVICE_UNKNOWN, 0, FALSE, &device_object);
     if (NT_SUCCESS(status)) {
         IoCreateSymbolicLink(&sym_name, &device_name);

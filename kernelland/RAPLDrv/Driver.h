@@ -22,6 +22,8 @@ Environment:
 #include "queue.h"
 #include "trace.h"
 
+#define DEVICE_NAME L"\\DosDevices\\RAPLDriver"
+
 EXTERN_C_START
 
 //
