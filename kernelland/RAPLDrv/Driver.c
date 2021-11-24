@@ -99,6 +99,7 @@ Return Value:
     DriverObject->MajorFunction[IRP_MJ_CREATE] = DispatchCreate;
     DriverObject->MajorFunction[IRP_MJ_CLOSE] = DispatchClose;
     DriverObject->MajorFunction[IRP_MJ_CLEANUP] = DispatchCleanup;
+    DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = DispatchDeviceControl;
 
     RtlInitUnicodeString(&device_name, L"\\Device\\RAPLDriver");
     RtlInitUnicodeString(&sym_name, DEVICE_NAME);
@@ -211,6 +212,23 @@ NTSTATUS DispatchClose(PDEVICE_OBJECT device, PIRP irp)
 NTSTATUS DispatchCleanup(PDEVICE_OBJECT device, PIRP irp)
 {
     DbgPrint("Cleanup driver %s... \n", device->DriverObject->DriverName);
+    irp->IoStatus.Status = STATUS_SUCCESS;
+    irp->IoStatus.Information = STATUS_SUCCESS;
+    IofCompleteRequest(irp, IO_NO_INCREMENT);
+
+    return STATUS_SUCCESS;
+}
+
+NTSTATUS DispatchDeviceControl(PDEVICE_OBJECT device, PIRP irp)
+{
+    ULONG controlCode;
+    PIO_STACK_LOCATION stackLocation;
+
+    stackLocation = irp->Tail.Overlay.CurrentStackLocation;
+    controlCode = stackLocation->Parameters.DeviceIoControl.IoControlCode;
+
+    DbgPrint("Received control code %u from %s.\n", controlCode, device->DriverObject->DriverName);
+
     irp->IoStatus.Status = STATUS_SUCCESS;
     irp->IoStatus.Information = STATUS_SUCCESS;
     IofCompleteRequest(irp, IO_NO_INCREMENT);
