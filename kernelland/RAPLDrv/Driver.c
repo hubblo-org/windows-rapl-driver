@@ -98,6 +98,7 @@ Return Value:
     DriverObject->DriverUnload = DriverUnload;
     DriverObject->MajorFunction[IRP_MJ_CREATE] = DispatchCreate;
     DriverObject->MajorFunction[IRP_MJ_CLOSE] = DispatchClose;
+    DriverObject->MajorFunction[IRP_MJ_CLEANUP] = DispatchCleanup;
 
     RtlInitUnicodeString(&device_name, L"\\Device\\RAPLDriver");
     RtlInitUnicodeString(&sym_name, DEVICE_NAME);
@@ -200,6 +201,16 @@ NTSTATUS DispatchCreate(PDEVICE_OBJECT device, PIRP irp)
 NTSTATUS DispatchClose(PDEVICE_OBJECT device, PIRP irp)
 {
     DbgPrint("Closing driver %s... \n", device->DriverObject->DriverName);
+    irp->IoStatus.Status = STATUS_SUCCESS;
+    irp->IoStatus.Information = STATUS_SUCCESS;
+    IofCompleteRequest(irp, IO_NO_INCREMENT);
+
+    return STATUS_SUCCESS;
+}
+
+NTSTATUS DispatchCleanup(PDEVICE_OBJECT device, PIRP irp)
+{
+    DbgPrint("Cleanup driver %s... \n", device->DriverObject->DriverName);
     irp->IoStatus.Status = STATUS_SUCCESS;
     irp->IoStatus.Information = STATUS_SUCCESS;
     IofCompleteRequest(irp, IO_NO_INCREMENT);
