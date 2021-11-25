@@ -33,7 +33,7 @@
 - https://docs.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/writing-your-first-driver
 - https://www.intel.com/content/www/us/en/developer/articles/tool/power-gadget.html#inpage-nav-12
 - https://github.com/Microsoft/Windows-driver-samples
-
+- https://www.osronline.com/article.cfm%5Earticle=229.htm
 
 Fichiers intéressants dans le noyau linux :
 - drivers/powercap/intel_rapl_msr.c
