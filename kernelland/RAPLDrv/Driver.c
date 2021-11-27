@@ -16,6 +16,7 @@ Environment:
 
 #include "driver.h"
 #include "driver.tmh"
+#include <intrin.h>
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text (INIT, DriverEntry)
@@ -224,6 +225,7 @@ NTSTATUS DispatchDeviceControl(PDEVICE_OBJECT device, PIRP irp)
     PCHAR outBuffer;
     ULONG controlCode;
     NTSTATUS ntStatus;
+    ULONGLONG msrResult;
     PIO_STACK_LOCATION stackLocation;
 
     stackLocation = irp->Tail.Overlay.CurrentStackLocation;
@@ -238,7 +240,8 @@ NTSTATUS DispatchDeviceControl(PDEVICE_OBJECT device, PIRP irp)
     }
     else
     {
-        memset(outBuffer, 1, stackLocation->Parameters.DeviceIoControl.OutputBufferLength);
+        msrResult = __readmsr(MSR_RAPL_POWER_UNIT);
+        memcpy(outBuffer, &msrResult, sizeof(ULONGLONG));
         ntStatus = STATUS_SUCCESS;
         irp->IoStatus.Information = stackLocation->Parameters.DeviceIoControl.OutputBufferLength;
     }
