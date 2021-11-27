@@ -31,7 +31,7 @@ int main(int argc, char **argv)
         ShowHelp();
 
     /* Open Service Manager */
-	scHandle = OpenSCManager(NULL, NULL, SC_MANAGER_CREATE_SERVICE);
+	scHandle = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
     if (scHandle == NULL)
     {
         cout << "Failed to open Service Manager. Run as admin?" << endl;
@@ -68,7 +68,7 @@ int main(int argc, char **argv)
     else if (strcmp(argv[1], "stop") == 0)
     {
         EnsureServiceExists(scHandle, &srvHandle);
-        if (!ControlService(srvHandle, 0, &srvStatus))
+        if (!ControlService(srvHandle, SERVICE_CONTROL_STOP, &srvStatus))
         {
             cout << "Failed to stop " << SERVICE_DESC << "." << endl;
             ExitProcess(ERROR_SERVICE_STOP_FAILED);
@@ -98,10 +98,10 @@ int main(int argc, char **argv)
 SC_HANDLE GetOrCreateService(SC_HANDLE manager, BOOL create)
 {
     if (!create)
-        return OpenService(manager, SERVICE_NAME, GENERIC_ALL);
+        return OpenService(manager, SERVICE_NAME, SERVICE_ALL_ACCESS);
 
     return CreateService(manager, SERVICE_NAME, SERVICE_DESC,
-                         SERVICE_ALL_ACCESS, SERVICE_FILE_SYSTEM_DRIVER,
+                         SERVICE_ALL_ACCESS, SERVICE_KERNEL_DRIVER,
                          SERVICE_DEMAND_START, SERVICE_ERROR_NORMAL,
                          DRIVER_PATH, NULL,
                          NULL, NULL,
