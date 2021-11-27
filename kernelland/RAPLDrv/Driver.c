@@ -103,7 +103,7 @@ Return Value:
 
     RtlInitUnicodeString(&device_name, L"\\Device\\RAPLDriver");
     RtlInitUnicodeString(&sym_name, DEVICE_NAME);
-    status = IoCreateDevice(DriverObject, 0, &device_name, FILE_DEVICE_UNKNOWN, 0, FALSE, &device_object);
+    status = IoCreateDevice(DriverObject, 0, &device_name, FILE_DEVICE_UNKNOWN, FILE_DEVICE_SECURE_OPEN, FALSE, &device_object);
     if (NT_SUCCESS(status)) {
         IoCreateSymbolicLink(&sym_name, &device_name);
     }
@@ -221,7 +221,9 @@ NTSTATUS DispatchCleanup(PDEVICE_OBJECT device, PIRP irp)
 
 NTSTATUS DispatchDeviceControl(PDEVICE_OBJECT device, PIRP irp)
 {
+    PCHAR outBuffer;
     ULONG controlCode;
+    NTSTATUS ntStatus;
     PIO_STACK_LOCATION stackLocation;
 
     stackLocation = irp->Tail.Overlay.CurrentStackLocation;
@@ -229,9 +231,19 @@ NTSTATUS DispatchDeviceControl(PDEVICE_OBJECT device, PIRP irp)
 
     DbgPrint("Received control code %u from %s.\n", controlCode, device->DriverObject->DriverName);
 
-    irp->IoStatus.Status = STATUS_SUCCESS;
-    irp->IoStatus.Information = STATUS_SUCCESS;
+    outBuffer = MmGetSystemAddressForMdlSafe(irp->MdlAddress, NormalPagePriority | MdlMappingNoExecute);
+    if (!outBuffer)
+    {
+        ntStatus = STATUS_INSUFFICIENT_RESOURCES;
+    }
+    else
+    {
+        memset(outBuffer, 1, stackLocation->Parameters.DeviceIoControl.OutputBufferLength);
+        ntStatus = STATUS_SUCCESS;
+        irp->IoStatus.Information = stackLocation->Parameters.DeviceIoControl.OutputBufferLength;
+    }
+    irp->IoStatus.Status = ntStatus;
     IofCompleteRequest(irp, IO_NO_INCREMENT);
 
-    return STATUS_SUCCESS;
+    return ntStatus;
 }
