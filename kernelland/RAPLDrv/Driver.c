@@ -225,13 +225,16 @@ NTSTATUS DispatchDeviceControl(PDEVICE_OBJECT device, PIRP irp)
     PCHAR outBuffer;
     ULONG controlCode;
     NTSTATUS ntStatus;
+    UINT16 functionCode;
     ULONGLONG msrResult;
     PIO_STACK_LOCATION stackLocation;
 
     stackLocation = irp->Tail.Overlay.CurrentStackLocation;
     controlCode = stackLocation->Parameters.DeviceIoControl.IoControlCode;
+    functionCode = FunctionFromIOCTLCode(controlCode);
 
     DbgPrint("Received control code %u from %s.\n", controlCode, device->DriverObject->DriverName);
+    DbgPrint("Received function code %u from %s.\n", functionCode, device->DriverObject->DriverName);
 
     outBuffer = MmGetSystemAddressForMdlSafe(irp->MdlAddress, NormalPagePriority | MdlMappingNoExecute);
     if (!outBuffer)
@@ -249,4 +252,9 @@ NTSTATUS DispatchDeviceControl(PDEVICE_OBJECT device, PIRP irp)
     IofCompleteRequest(irp, IO_NO_INCREMENT);
 
     return ntStatus;
+}
+
+UINT16 FunctionFromIOCTLCode(UINT32 code)
+{
+    return (code >> 2) & 0xFFF;
 }
