@@ -23,7 +23,6 @@ Environment:
 #include "trace.h"
 
 #define DEVICE_NAME L"\\DosDevices\\RAPLDriver"
-#define MSR_RAPL_POWER_UNIT 0x606
 
 EXTERN_C_START
 

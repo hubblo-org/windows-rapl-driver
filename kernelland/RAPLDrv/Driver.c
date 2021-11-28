@@ -17,6 +17,7 @@ Environment:
 #include "driver.h"
 #include "driver.tmh"
 #include <intrin.h>
+#include "msr-index.h"
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text (INIT, DriverEntry)
@@ -243,11 +244,32 @@ NTSTATUS DispatchDeviceControl(PDEVICE_OBJECT device, PIRP irp)
     }
     else
     {
-        msrResult = __readmsr(MSR_RAPL_POWER_UNIT);
+        switch (functionCode)
+        {
+        case 0xBEB:
+            msrResult = __readmsr(MSR_RAPL_POWER_UNIT);
+            break;
+
+        case 0xBEC:
+            msrResult = __readmsr(MSR_PKG_POWER_LIMIT);
+            break;
+
+        case 0xBED:
+            msrResult = __readmsr(MSR_PKG_ENERGY_STATUS);
+            break;
+
+        default:
+            DbgPrint("Unknown function code 0x%04x, ignoring.\n", functionCode);
+            ntStatus = STATUS_INVALID_DEVICE_REQUEST;
+            goto end;
+        }
+
         memcpy(outBuffer, &msrResult, sizeof(ULONGLONG));
         ntStatus = STATUS_SUCCESS;
         irp->IoStatus.Information = stackLocation->Parameters.DeviceIoControl.OutputBufferLength;
     }
+
+end:
     irp->IoStatus.Status = ntStatus;
     IofCompleteRequest(irp, IO_NO_INCREMENT);
 
