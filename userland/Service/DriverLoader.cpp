@@ -5,7 +5,7 @@ using namespace std;
 
 #define SERVICE_NAME "RAPLDrvService"
 #define SERVICE_DESC "RAPL Driver Service"
-#define DRIVER_PATH "C:\\Users\\Vico\\source\\repos\\RAPLDrv\\x64\\Debug\\RAPLDrv.sys"
+#define DRIVER_EXE "RAPLDrv.sys"
 
 typedef enum {
     ERROR_SERVICE_OK,
@@ -97,13 +97,20 @@ int main(int argc, char **argv)
 
 SC_HANDLE GetOrCreateService(SC_HANDLE manager, BOOL create)
 {
+    CHAR pathToExe[MAX_PATH];
+    LPSTR currentPath;
+
     if (!create)
         return OpenService(manager, SERVICE_NAME, SERVICE_ALL_ACCESS);
 
+    currentPath = new CHAR[MAX_PATH];
+    GetCurrentDirectory(MAX_PATH - 1, currentPath);
+    sprintf_s(pathToExe, MAX_PATH - 1, "%s\\%s", currentPath, DRIVER_EXE);
+    delete[] currentPath;
     return CreateService(manager, SERVICE_NAME, SERVICE_DESC,
                          SERVICE_ALL_ACCESS, SERVICE_KERNEL_DRIVER,
                          SERVICE_DEMAND_START, SERVICE_ERROR_NORMAL,
-                         DRIVER_PATH, NULL,
+                         pathToExe, NULL,
                          NULL, NULL,
                          NULL, NULL);
 }
