@@ -4,7 +4,7 @@
 #pragma once
 
 #include <cstdint>
-#include <Windows.h>
+#include <windows.h>
 
 #define DRIVER_DEVICE_BLOCK_NAME L"\\\\.\\RAPLDriver"
 #define AGENT_POWER_UNIT_CODE 0xBEB

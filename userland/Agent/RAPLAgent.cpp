@@ -18,9 +18,9 @@ int main()
 
 void OpenDevice(void)
 {
-    hDevice = CreateFile(DRIVER_DEVICE_BLOCK_NAME, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE,
-                         NULL, OPEN_EXISTING,
-                         FILE_ATTRIBUTE_NORMAL, NULL);
+    hDevice = CreateFileW(DRIVER_DEVICE_BLOCK_NAME, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE,
+                          NULL, OPEN_EXISTING,
+                          FILE_ATTRIBUTE_NORMAL, NULL);
     if (hDevice == INVALID_HANDLE_VALUE)
     {
         puts("Failed to open device");
