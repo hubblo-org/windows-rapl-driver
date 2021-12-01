@@ -29,7 +29,7 @@ void OpenDevice(void)
     puts("Device opened!");
 }
 
-BOOL SendRequest(const uint16_t requestCode, const uint8_t request, const size_t requestLength, uint8_t* reply, const size_t replyLength)
+BOOL SendRequest(const uint16_t requestCode, const uint8_t *request, const size_t requestLength, uint8_t* reply, const size_t replyLength)
 {
     size_t i;
     DWORD len;

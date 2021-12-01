@@ -18,6 +18,6 @@ static uint8_t msrResult[sizeof(MSR_REGISTER_T)];
 static HANDLE hDevice;
 
 void OpenDevice(void);
-BOOL SendRequest(const uint16_t requestCode, const uint8_t request, const size_t requestLength, uint8_t* reply, const size_t replyLength);
+BOOL SendRequest(const uint16_t requestCode, const uint8_t *request, const size_t requestLength, uint8_t* reply, const size_t replyLength);
 
 #endif /* _AGENT_H */
