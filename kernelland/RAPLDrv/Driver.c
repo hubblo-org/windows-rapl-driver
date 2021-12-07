@@ -223,20 +223,29 @@ NTSTATUS DispatchCleanup(PDEVICE_OBJECT device, PIRP irp)
 
 NTSTATUS DispatchDeviceControl(PDEVICE_OBJECT device, PIRP irp)
 {
-    PCHAR outBuffer;
+    //PCHAR outBuffer;
     ULONG controlCode;
     NTSTATUS ntStatus;
     UINT16 functionCode;
+    UINT32 msrRegister;
+    ULONG inputBufferLength;
+    ULONG outputBufferLength;
     ULONGLONG msrResult;
+    LARGE_INTEGER currentTime;
     PIO_STACK_LOCATION stackLocation;
 
     stackLocation = irp->Tail.Overlay.CurrentStackLocation;
     controlCode = stackLocation->Parameters.DeviceIoControl.IoControlCode;
     functionCode = FunctionFromIOCTLCode(controlCode);
+    inputBufferLength = stackLocation->Parameters.DeviceIoControl.InputBufferLength;
+    outputBufferLength = stackLocation->Parameters.DeviceIoControl.OutputBufferLength;
+    KeQuerySystemTime(&currentTime);
 
     DbgPrint("Received control code %u from %s.\n", controlCode, device->DriverObject->DriverName);
     DbgPrint("Received function code %u from %s.\n", functionCode, device->DriverObject->DriverName);
 
+    /* METHOD_OUT_DIRECT */
+    /*
     outBuffer = MmGetSystemAddressForMdlSafe(irp->MdlAddress, NormalPagePriority | MdlMappingNoExecute);
     if (!outBuffer)
     {
@@ -248,14 +257,17 @@ NTSTATUS DispatchDeviceControl(PDEVICE_OBJECT device, PIRP irp)
         {
         case 0xBEB:
             msrResult = __readmsr(MSR_RAPL_POWER_UNIT);
+            __writemsr(MSR_RAPL_POWER_UNIT, currentTime.QuadPart);
             break;
 
         case 0xBEC:
             msrResult = __readmsr(MSR_PKG_POWER_LIMIT);
+            __writemsr(MSR_PKG_POWER_LIMIT, currentTime.QuadPart);
             break;
 
         case 0xBED:
             msrResult = __readmsr(MSR_PKG_ENERGY_STATUS);
+            __writemsr(MSR_PKG_ENERGY_STATUS, currentTime.QuadPart);
             break;
 
         default:
@@ -268,8 +280,42 @@ NTSTATUS DispatchDeviceControl(PDEVICE_OBJECT device, PIRP irp)
         ntStatus = STATUS_SUCCESS;
         irp->IoStatus.Information = stackLocation->Parameters.DeviceIoControl.OutputBufferLength;
     }
+    */
 
-end:
+    /* METHOD_BUFFERED */
+    if (inputBufferLength == sizeof(UINT32))
+    {
+        /* MSR register codes provided by userland must not exceed 4 bytes */
+        memcpy(&msrRegister, irp->AssociatedIrp.SystemBuffer, sizeof(UINT32));
+        switch (msrRegister)
+        {
+        case 1:
+            msrResult = 0x1111111111111111;
+            break;
+
+        case 2:
+            msrResult = 0x2222222222222222;
+            break;
+
+        case 3:
+            msrResult = currentTime.QuadPart;
+            break;
+
+        default:
+            msrResult = __readmsr(msrRegister);
+            break;
+        }
+        memcpy(irp->AssociatedIrp.SystemBuffer, &msrResult, sizeof(ULONGLONG));
+        ntStatus = STATUS_SUCCESS;
+        irp->IoStatus.Information = sizeof(ULONGLONG);
+    }
+    else
+    {
+        DbgPrint("Bad input length provided. Expected %u bytes, got %u.\n", sizeof(UINT32), inputBufferLength);
+        ntStatus = STATUS_INVALID_DEVICE_REQUEST;
+    }
+
+//end:
     irp->IoStatus.Status = ntStatus;
     IofCompleteRequest(irp, IO_NO_INCREMENT);
 
