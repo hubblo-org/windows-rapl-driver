@@ -7,9 +7,15 @@ int main()
 {
     OpenDevice();
 
-    SendRequest(AGENT_POWER_UNIT_CODE, NULL, 0, msrResult, sizeof(MSR_REGISTER_T));
-    SendRequest(AGENT_POWER_LIMIT_CODE, NULL, 0, msrResult, sizeof(MSR_REGISTER_T));
-    SendRequest(AGENT_ENERGY_STATUS_CODE, NULL, 0, msrResult, sizeof(MSR_REGISTER_T));
+    /* These 3 calls are for example only */
+    SendRequest(AGENT_POWER_UNIT_CODE, msrCodeToBuffer(1), sizeof(uint32_t), msrResult, sizeof(MSR_REGISTER_T));
+    SendRequest(AGENT_POWER_LIMIT_CODE, msrCodeToBuffer(2), sizeof(uint32_t), msrResult, sizeof(MSR_REGISTER_T));
+    SendRequest(AGENT_ENERGY_STATUS_CODE, msrCodeToBuffer(3), sizeof(uint32_t), msrResult, sizeof(MSR_REGISTER_T));
+
+    /* These 3 calls are almost the final example to what we really want */
+    SendRequest(AGENT_POWER_UNIT_CODE, msrCodeToBuffer(AGENT_POWER_UNIT_CODE), sizeof(uint32_t), msrResult, sizeof(MSR_REGISTER_T));
+    SendRequest(AGENT_POWER_LIMIT_CODE, msrCodeToBuffer(AGENT_POWER_LIMIT_CODE), sizeof(uint32_t), msrResult, sizeof(MSR_REGISTER_T));
+    SendRequest(AGENT_ENERGY_STATUS_CODE, msrCodeToBuffer(AGENT_ENERGY_STATUS_CODE), sizeof(uint32_t), msrResult, sizeof(MSR_REGISTER_T));
 
     CloseHandle(hDevice);
 
@@ -36,9 +42,9 @@ BOOL SendRequest(const uint16_t requestCode, const uint8_t *request, const size_
 
     /* Zero memory result buffer */
     memset(reply, 0, replyLength);
-    if (DeviceIoControl(hDevice, CTL_CODE(FILE_DEVICE_UNKNOWN, requestCode, METHOD_OUT_DIRECT, FILE_READ_DATA),
+    if (DeviceIoControl(hDevice, CTL_CODE(FILE_DEVICE_UNKNOWN, requestCode, METHOD_BUFFERED, FILE_READ_DATA | FILE_WRITE_DATA),
         (LPVOID)request, requestLength, /* Driver does not need input data so set it to NULL */
-        msrResult, sizeof(MSR_REGISTER_T), /* Set MSR buffer to store answer from driver */
+        msrResult, replyLength, /* Set MSR buffer to store answer from driver */
         &len, NULL))
     {
         puts("Device answered!");
@@ -64,4 +70,10 @@ BOOL SendRequest(const uint16_t requestCode, const uint8_t *request, const size_
     }
 
     return TRUE;
+}
+
+const uint8_t* msrCodeToBuffer(uint32_t code)
+{
+    memcpy(msrRegisterBuffer, &code, sizeof(uint32_t));
+    return msrRegisterBuffer;
 }
