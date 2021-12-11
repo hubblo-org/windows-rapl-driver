@@ -43,7 +43,7 @@ BOOL SendRequest(const uint16_t requestCode, const uint8_t *request, const size_
     /* Zero memory result buffer */
     memset(reply, 0, replyLength);
     if (DeviceIoControl(hDevice, CTL_CODE(FILE_DEVICE_UNKNOWN, requestCode, METHOD_BUFFERED, FILE_READ_DATA | FILE_WRITE_DATA),
-        (LPVOID)request, requestLength, /* Driver does not need input data so set it to NULL */
+        (LPVOID)request, requestLength,
         msrResult, replyLength, /* Set MSR buffer to store answer from driver */
         &len, NULL))
     {
