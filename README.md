@@ -47,3 +47,14 @@ Prérequis :
 
 Compilation :
 x86_64-w64-mingw32-g++ DriverLoader.cpp -o DriverLoader.exe
+
+
+# Compilation CPUID
+
+Le code qui appelle les informations du constructeur du CPU (via l'usage de l'instruction CPUID)
+emploie de l'assembleur "inliné".
+
+Pour compiler ce code sous Linux, il faut préciser à GCC d'utiliser la syntaxe Intel et non pas AT&T. Il faut aussi préciser que l'on ne souhaite pas un exécutable à position indépendante.
+Exemple : gcc -masm=intel -no-pie cpuid.c -o cpuid
+
+
