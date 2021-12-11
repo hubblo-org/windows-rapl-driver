@@ -14,12 +14,12 @@
 /* MSR registers are 64 bit long */
 typedef uint64_t MSR_REGISTER_T;
 static uint8_t msrResult[sizeof(MSR_REGISTER_T)];
-static uint8_t msrRegisterBuffer[sizeof(uint32_t)];
+static uint8_t msrRegisterBuffer[sizeof(MSR_REGISTER_T)];
 
 static HANDLE hDevice;
 
 void OpenDevice(void);
 BOOL SendRequest(const uint16_t requestCode, const uint8_t *request, const size_t requestLength, uint8_t* reply, const size_t replyLength);
-const uint8_t* msrCodeToBuffer(uint32_t code);
+const uint8_t* msrRegisterToBuffer(MSR_REGISTER_T msrRegister);
 
 #endif /* _AGENT_H */

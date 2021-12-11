@@ -283,10 +283,10 @@ NTSTATUS DispatchDeviceControl(PDEVICE_OBJECT device, PIRP irp)
     */
 
     /* METHOD_BUFFERED */
-    if (inputBufferLength == sizeof(UINT32))
+    if (inputBufferLength == sizeof(ULONGLONG))
     {
-        /* MSR register codes provided by userland must not exceed 4 bytes */
-        memcpy(&msrRegister, irp->AssociatedIrp.SystemBuffer, sizeof(UINT32));
+        /* MSR register codes provided by userland must not exceed 8 bytes */
+        memcpy(&msrRegister, irp->AssociatedIrp.SystemBuffer, sizeof(ULONGLONG));
         switch (msrRegister)
         {
         case 1:
@@ -311,7 +311,7 @@ NTSTATUS DispatchDeviceControl(PDEVICE_OBJECT device, PIRP irp)
     }
     else
     {
-        DbgPrint("Bad input length provided. Expected %u bytes, got %u.\n", sizeof(UINT32), inputBufferLength);
+        DbgPrint("Bad input length provided. Expected %u bytes, got %u.\n", sizeof(ULONGLONG), inputBufferLength);
         ntStatus = STATUS_INVALID_DEVICE_REQUEST;
     }
 
