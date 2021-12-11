@@ -21,5 +21,6 @@ static HANDLE hDevice;
 void OpenDevice(void);
 BOOL SendRequest(const uint16_t requestCode, const uint8_t *request, const size_t requestLength, uint8_t* reply, const size_t replyLength);
 const uint8_t* msrRegisterToBuffer(MSR_REGISTER_T msrRegister);
+extern "C" void __cpuid__(char *manufacturer);
 
 #endif /* _AGENT_H */

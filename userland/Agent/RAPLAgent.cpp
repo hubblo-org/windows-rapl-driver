@@ -5,6 +5,12 @@ using namespace std;
 
 int main()
 {
+    char manufacturer[13];
+
+    /* Get CPU information */
+    __cpuid__(manufacturer);
+    printf("CPU manufacturer: %s\n", manufacturer);
+
     OpenDevice();
 
     /* These 3 calls are for example only */
