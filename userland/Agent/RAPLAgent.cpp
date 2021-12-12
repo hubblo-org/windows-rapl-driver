@@ -5,10 +5,13 @@ using namespace std;
 
 int main()
 {
-    char manufacturer[13];
-
     /* Get CPU information */
+    memset(manufacturer, 0, sizeof(manufacturer));
+#ifdef WIN64
     __cpuid__(manufacturer);
+#else
+    __cpuid__();
+#endif
     printf("CPU manufacturer: %s\n", manufacturer);
 
     OpenDevice();
@@ -19,9 +22,19 @@ int main()
     SendRequest(AGENT_ENERGY_STATUS_CODE, msrRegisterToBuffer(3), sizeof(MSR_REGISTER_T), msrResult, sizeof(MSR_REGISTER_T));
 
     /* These 3 calls are almost the final example to what we really want */
-    SendRequest(AGENT_POWER_UNIT_CODE, msrRegisterToBuffer(AGENT_POWER_UNIT_CODE), sizeof(MSR_REGISTER_T), msrResult, sizeof(MSR_REGISTER_T));
-    SendRequest(AGENT_POWER_LIMIT_CODE, msrRegisterToBuffer(AGENT_POWER_LIMIT_CODE), sizeof(MSR_REGISTER_T), msrResult, sizeof(MSR_REGISTER_T));
-    SendRequest(AGENT_ENERGY_STATUS_CODE, msrRegisterToBuffer(AGENT_ENERGY_STATUS_CODE), sizeof(MSR_REGISTER_T), msrResult, sizeof(MSR_REGISTER_T));
+    if (strncmp(manufacturer, "GenuineIntel", 12) == 0)
+    {
+        SendRequest(AGENT_POWER_UNIT_CODE, msrRegisterToBuffer(MSR_RAPL_POWER_UNIT), sizeof(MSR_REGISTER_T), msrResult, sizeof(MSR_REGISTER_T));
+        SendRequest(AGENT_POWER_LIMIT_CODE, msrRegisterToBuffer(MSR_PKG_POWER_LIMIT), sizeof(MSR_REGISTER_T), msrResult, sizeof(MSR_REGISTER_T));
+        SendRequest(AGENT_ENERGY_STATUS_CODE, msrRegisterToBuffer(MSR_PKG_ENERGY_STATUS), sizeof(MSR_REGISTER_T), msrResult, sizeof(MSR_REGISTER_T));
+    }
+    else
+    {
+        /* Assume it's AMD processor */
+        SendRequest(AGENT_POWER_UNIT_CODE, msrRegisterToBuffer(MSR_AMD_RAPL_POWER_UNIT), sizeof(MSR_REGISTER_T), msrResult, sizeof(MSR_REGISTER_T));
+        SendRequest(AGENT_POWER_LIMIT_CODE, msrRegisterToBuffer(MSR_AMD_CORE_ENERGY_STATUS), sizeof(MSR_REGISTER_T), msrResult, sizeof(MSR_REGISTER_T)); // FIXME: is that really equal to MSR_PKG_POWER_LIMIT??
+        SendRequest(AGENT_ENERGY_STATUS_CODE, msrRegisterToBuffer(MSR_AMD_PKG_ENERGY_STATUS), sizeof(MSR_REGISTER_T), msrResult, sizeof(MSR_REGISTER_T));
+    }
 
     CloseHandle(hDevice);
 
@@ -83,3 +96,20 @@ const uint8_t* msrRegisterToBuffer(MSR_REGISTER_T msrRegister)
     memcpy(msrRegisterBuffer, &msrRegister, sizeof(MSR_REGISTER_T));
     return msrRegisterBuffer;
 }
+
+#ifndef WIN64
+void __cpuid__(void)
+{
+    __asm
+    {
+        pushad
+        xor eax, eax
+        cpuid
+        lea eax, manufacturer
+        mov dword ptr ds : [eax] , ebx
+        mov dword ptr ds : [eax + 4] , edx
+        mov dword ptr ds : [eax + 8] , ecx
+        popad
+    }
+}
+#endif
