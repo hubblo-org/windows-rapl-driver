@@ -8,7 +8,7 @@ __cpuid__:
     cpuid ; Call CPUID
     pop eax ; Restore pointer to manufacturer buffer
     mov dword [eax], ebx
-    mov dword [eax + 4], ecx
-    mov dword [eax + 8], edx
+    mov dword [eax + 4], edx
+    mov dword [eax + 8], ecx
     popad ; Restore all registers
     ret

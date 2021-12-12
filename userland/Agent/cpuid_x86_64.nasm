@@ -7,6 +7,6 @@ __cpuid__:
     cpuid ; Call CPUID
     pop rax ; Restore pointer to manufacturer buffer
     mov dword [rax], ebx
-    mov dword [rax + 4], ecx
-    mov dword [rax + 8], edx
+    mov dword [rax + 4], edx
+    mov dword [rax + 8], ecx
     ret
