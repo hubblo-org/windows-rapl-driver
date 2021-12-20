@@ -45,15 +45,18 @@ static uint8_t msrRegisterBuffer[sizeof(MSR_REGISTER_T)];
 
 static HANDLE hDevice;
 static char manufacturer[13];
+static int cpu_regs[4];
 
 void OpenDevice(void);
 BOOL SendRequest(const uint16_t requestCode, const uint8_t *request, const size_t requestLength, uint8_t* reply, const size_t replyLength);
 const uint8_t* msrRegisterToBuffer(MSR_REGISTER_T msrRegister);
 
+/*
 #ifdef WIN64
 extern "C" void __cpuid__(char *manufacturer);
 #else
 void __cpuid__(void);
 #endif
+*/
 
 #endif /* _AGENT_H */

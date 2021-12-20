@@ -1,4 +1,5 @@
 #include <iostream>
+#include <intrin.h>
 #include "Agent.h"
 
 using namespace std;
@@ -7,11 +8,17 @@ int main()
 {
     /* Get CPU information */
     memset(manufacturer, 0, sizeof(manufacturer));
+    /*
 #ifdef WIN64
     __cpuid__(manufacturer);
 #else
     __cpuid__();
 #endif
+    */
+    __cpuid(cpu_regs, 0);
+    memcpy(manufacturer, &cpu_regs[1], sizeof(uint32_t));
+    memcpy(manufacturer + sizeof(uint32_t), &cpu_regs[3], sizeof(uint32_t));
+    memcpy(manufacturer + 2 * sizeof(uint32_t), &cpu_regs[2], sizeof(uint32_t));
     printf("CPU manufacturer: %s\n", manufacturer);
 
     OpenDevice();
