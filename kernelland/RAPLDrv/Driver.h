@@ -22,7 +22,8 @@ Environment:
 #include "queue.h"
 #include "trace.h"
 
-#define DEVICE_NAME L"\\DosDevices\\RAPLDriver"
+#define DEVICE_NAME L"\\Device\\ScaphandreDriver"
+#define DEVICE_SYM_NAME L"\\DosDevices\\ScaphandreDriver"
 
 EXTERN_C_START
 
@@ -41,5 +42,3 @@ NTSTATUS DispatchCreate(PDEVICE_OBJECT device, PIRP irp);
 NTSTATUS DispatchClose(PDEVICE_OBJECT device, PIRP irp);
 NTSTATUS DispatchCleanup(PDEVICE_OBJECT device, PIRP irp);
 NTSTATUS DispatchDeviceControl(PDEVICE_OBJECT device, PIRP irp);
-
-UINT16 FunctionFromIOCTLCode(UINT32 code);

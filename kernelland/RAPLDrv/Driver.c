@@ -17,7 +17,6 @@ Environment:
 #include "driver.h"
 #include "driver.tmh"
 #include <intrin.h>
-#include "msr-index.h"
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text (INIT, DriverEntry)
@@ -103,8 +102,8 @@ Return Value:
     DriverObject->MajorFunction[IRP_MJ_CLEANUP] = DispatchCleanup;
     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = DispatchDeviceControl;
 
-    RtlInitUnicodeString(&device_name, L"\\Device\\RAPLDriver");
-    RtlInitUnicodeString(&sym_name, DEVICE_NAME);
+    RtlInitUnicodeString(&device_name, DEVICE_NAME);
+    RtlInitUnicodeString(&sym_name, DEVICE_SYM_NAME);
     status = IoCreateDevice(DriverObject, 0, &device_name, FILE_DEVICE_UNKNOWN, FILE_DEVICE_SECURE_OPEN, FALSE, &device_object);
     if (NT_SUCCESS(status)) {
         IoCreateSymbolicLink(&sym_name, &device_name);
@@ -223,88 +222,25 @@ NTSTATUS DispatchCleanup(PDEVICE_OBJECT device, PIRP irp)
 
 NTSTATUS DispatchDeviceControl(PDEVICE_OBJECT device, PIRP irp)
 {
-    //PCHAR outBuffer;
-    ULONG controlCode;
     NTSTATUS ntStatus;
-    UINT16 functionCode;
     UINT32 msrRegister;
     ULONG inputBufferLength;
     ULONG outputBufferLength;
     ULONGLONG msrResult;
-    LARGE_INTEGER currentTime;
     PIO_STACK_LOCATION stackLocation;
 
     stackLocation = irp->Tail.Overlay.CurrentStackLocation;
-    controlCode = stackLocation->Parameters.DeviceIoControl.IoControlCode;
-    functionCode = FunctionFromIOCTLCode(controlCode);
     inputBufferLength = stackLocation->Parameters.DeviceIoControl.InputBufferLength;
     outputBufferLength = stackLocation->Parameters.DeviceIoControl.OutputBufferLength;
-    KeQuerySystemTime(&currentTime);
 
-    DbgPrint("Received control code %u from %s.\n", controlCode, device->DriverObject->DriverName);
-    DbgPrint("Received function code %u from %s.\n", functionCode, device->DriverObject->DriverName);
-
-    /* METHOD_OUT_DIRECT */
-    /*
-    outBuffer = MmGetSystemAddressForMdlSafe(irp->MdlAddress, NormalPagePriority | MdlMappingNoExecute);
-    if (!outBuffer)
-    {
-        ntStatus = STATUS_INSUFFICIENT_RESOURCES;
-    }
-    else
-    {
-        switch (functionCode)
-        {
-        case 0xBEB:
-            msrResult = __readmsr(MSR_RAPL_POWER_UNIT);
-            __writemsr(MSR_RAPL_POWER_UNIT, currentTime.QuadPart);
-            break;
-
-        case 0xBEC:
-            msrResult = __readmsr(MSR_PKG_POWER_LIMIT);
-            __writemsr(MSR_PKG_POWER_LIMIT, currentTime.QuadPart);
-            break;
-
-        case 0xBED:
-            msrResult = __readmsr(MSR_PKG_ENERGY_STATUS);
-            __writemsr(MSR_PKG_ENERGY_STATUS, currentTime.QuadPart);
-            break;
-
-        default:
-            DbgPrint("Unknown function code 0x%04x, ignoring.\n", functionCode);
-            ntStatus = STATUS_INVALID_DEVICE_REQUEST;
-            goto end;
-        }
-
-        memcpy(outBuffer, &msrResult, sizeof(ULONGLONG));
-        ntStatus = STATUS_SUCCESS;
-        irp->IoStatus.Information = stackLocation->Parameters.DeviceIoControl.OutputBufferLength;
-    }
-    */
+    DbgPrint("Received event for driver %s... \n", device->DriverObject->DriverName);
 
     /* METHOD_BUFFERED */
     if (inputBufferLength == sizeof(ULONGLONG))
     {
         /* MSR register codes provided by userland must not exceed 8 bytes */
         memcpy(&msrRegister, irp->AssociatedIrp.SystemBuffer, sizeof(ULONGLONG));
-        switch (msrRegister)
-        {
-        case 1:
-            msrResult = 0x1111111111111111;
-            break;
-
-        case 2:
-            msrResult = 0x2222222222222222;
-            break;
-
-        case 3:
-            msrResult = currentTime.QuadPart;
-            break;
-
-        default:
-            msrResult = __readmsr(msrRegister);
-            break;
-        }
+        msrResult = __readmsr(msrRegister);
         memcpy(irp->AssociatedIrp.SystemBuffer, &msrResult, sizeof(ULONGLONG));
         ntStatus = STATUS_SUCCESS;
         irp->IoStatus.Information = sizeof(ULONGLONG);
@@ -315,14 +251,8 @@ NTSTATUS DispatchDeviceControl(PDEVICE_OBJECT device, PIRP irp)
         ntStatus = STATUS_INVALID_DEVICE_REQUEST;
     }
 
-//end:
     irp->IoStatus.Status = ntStatus;
     IofCompleteRequest(irp, IO_NO_INCREMENT);
 
     return ntStatus;
-}
-
-UINT16 FunctionFromIOCTLCode(UINT32 code)
-{
-    return (code >> 2) & 0xFFF;
 }
