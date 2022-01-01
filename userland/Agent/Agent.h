@@ -6,7 +6,7 @@
 #include <cstdint>
 #include <windows.h>
 
-#define DRIVER_DEVICE_BLOCK_NAME L"\\\\.\\RAPLDriver"
+#define DRIVER_DEVICE_BLOCK_NAME L"\\\\.\\ScaphandreDriver"
 #define AGENT_POWER_UNIT_CODE 0xBEB
 #define AGENT_POWER_LIMIT_CODE 0xBEC
 #define AGENT_ENERGY_STATUS_CODE 0xBED
@@ -50,6 +50,7 @@ static int cpu_regs[4];
 void OpenDevice(void);
 BOOL SendRequest(const uint16_t requestCode, const uint8_t *request, const size_t requestLength, uint8_t* reply, const size_t replyLength);
 const uint8_t* msrRegisterToBuffer(MSR_REGISTER_T msrRegister);
+void printMsrBuffer(const uint8_t* buffer);
 
 /*
 #ifdef WIN64

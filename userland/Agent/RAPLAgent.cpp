@@ -6,15 +6,10 @@ using namespace std;
 
 int main()
 {
+    uint8_t i, j, count = 128;
+
     /* Get CPU information */
     memset(manufacturer, 0, sizeof(manufacturer));
-    /*
-#ifdef WIN64
-    __cpuid__(manufacturer);
-#else
-    __cpuid__();
-#endif
-    */
     __cpuid(cpu_regs, 0);
     memcpy(manufacturer, &cpu_regs[1], sizeof(uint32_t));
     memcpy(manufacturer + sizeof(uint32_t), &cpu_regs[3], sizeof(uint32_t));
@@ -23,24 +18,25 @@ int main()
 
     OpenDevice();
 
-    /* These 3 calls are for example only */
-    SendRequest(AGENT_POWER_UNIT_CODE, msrRegisterToBuffer(1), sizeof(MSR_REGISTER_T), msrResult, sizeof(MSR_REGISTER_T));
-    SendRequest(AGENT_POWER_LIMIT_CODE, msrRegisterToBuffer(2), sizeof(MSR_REGISTER_T), msrResult, sizeof(MSR_REGISTER_T));
-    SendRequest(AGENT_ENERGY_STATUS_CODE, msrRegisterToBuffer(3), sizeof(MSR_REGISTER_T), msrResult, sizeof(MSR_REGISTER_T));
-
-    /* These 3 calls are almost the final example to what we really want */
-    if (strncmp(manufacturer, "GenuineIntel", 12) == 0)
+    for (i = i ^ i; i < count; ++i)
     {
-        SendRequest(AGENT_POWER_UNIT_CODE, msrRegisterToBuffer(MSR_RAPL_POWER_UNIT), sizeof(MSR_REGISTER_T), msrResult, sizeof(MSR_REGISTER_T));
-        SendRequest(AGENT_POWER_LIMIT_CODE, msrRegisterToBuffer(MSR_PKG_POWER_LIMIT), sizeof(MSR_REGISTER_T), msrResult, sizeof(MSR_REGISTER_T));
-        SendRequest(AGENT_ENERGY_STATUS_CODE, msrRegisterToBuffer(MSR_PKG_ENERGY_STATUS), sizeof(MSR_REGISTER_T), msrResult, sizeof(MSR_REGISTER_T));
-    }
-    else
-    {
-        /* Assume it's AMD processor */
-        SendRequest(AGENT_POWER_UNIT_CODE, msrRegisterToBuffer(MSR_AMD_RAPL_POWER_UNIT), sizeof(MSR_REGISTER_T), msrResult, sizeof(MSR_REGISTER_T));
-        SendRequest(AGENT_POWER_LIMIT_CODE, msrRegisterToBuffer(MSR_AMD_CORE_ENERGY_STATUS), sizeof(MSR_REGISTER_T), msrResult, sizeof(MSR_REGISTER_T)); // FIXME: is that really equal to MSR_PKG_POWER_LIMIT??
-        SendRequest(AGENT_ENERGY_STATUS_CODE, msrRegisterToBuffer(MSR_AMD_PKG_ENERGY_STATUS), sizeof(MSR_REGISTER_T), msrResult, sizeof(MSR_REGISTER_T));
+        /* These 3 calls are almost the final example to what we really want */
+        if (strncmp(manufacturer, "GenuineIntel", 12) == 0)
+        {
+            SendRequest(AGENT_POWER_UNIT_CODE, msrRegisterToBuffer(MSR_RAPL_POWER_UNIT), sizeof(MSR_REGISTER_T), msrResult, sizeof(MSR_REGISTER_T));
+            printMsrBuffer(msrResult);
+            SendRequest(AGENT_POWER_LIMIT_CODE, msrRegisterToBuffer(MSR_PKG_POWER_LIMIT), sizeof(MSR_REGISTER_T), msrResult, sizeof(MSR_REGISTER_T));
+            printMsrBuffer(msrResult);
+            SendRequest(AGENT_ENERGY_STATUS_CODE, msrRegisterToBuffer(MSR_PKG_ENERGY_STATUS), sizeof(MSR_REGISTER_T), msrResult, sizeof(MSR_REGISTER_T));
+            printMsrBuffer(msrResult);
+        }
+        else
+        {
+            /* Assume it's AMD processor */
+            SendRequest(AGENT_POWER_UNIT_CODE, msrRegisterToBuffer(MSR_AMD_RAPL_POWER_UNIT), sizeof(MSR_REGISTER_T), msrResult, sizeof(MSR_REGISTER_T));
+            SendRequest(AGENT_POWER_LIMIT_CODE, msrRegisterToBuffer(MSR_AMD_CORE_ENERGY_STATUS), sizeof(MSR_REGISTER_T), msrResult, sizeof(MSR_REGISTER_T)); // FIXME: is that really equal to MSR_PKG_POWER_LIMIT??
+            SendRequest(AGENT_ENERGY_STATUS_CODE, msrRegisterToBuffer(MSR_AMD_PKG_ENERGY_STATUS), sizeof(MSR_REGISTER_T), msrResult, sizeof(MSR_REGISTER_T));
+        }
     }
 
     CloseHandle(hDevice);
@@ -73,13 +69,14 @@ BOOL SendRequest(const uint16_t requestCode, const uint8_t *request, const size_
         msrResult, replyLength, /* Set MSR buffer to store answer from driver */
         &len, NULL))
     {
-        puts("Device answered!");
+        //puts("Device answered!");
         if (len != replyLength)
         {
             printf("Uh oh, got invalid length answer. Expected %i, got %i\n", replyLength, len);
             return FALSE;
         }
 
+        /*
         puts("Got answer:");
         for (i = 0; i < replyLength; ++i)
         {
@@ -88,6 +85,7 @@ BOOL SendRequest(const uint16_t requestCode, const uint8_t *request, const size_
             printf("%02x ", reply[i]);
         }
         puts("");
+        */
     }
     else
     {
@@ -104,19 +102,10 @@ const uint8_t* msrRegisterToBuffer(MSR_REGISTER_T msrRegister)
     return msrRegisterBuffer;
 }
 
-#ifndef WIN64
-void __cpuid__(void)
+void printMsrBuffer(const uint8_t *buffer)
 {
-    __asm
-    {
-        pushad
-        xor eax, eax
-        cpuid
-        lea eax, manufacturer
-        mov dword ptr ds : [eax] , ebx
-        mov dword ptr ds : [eax + 4] , edx
-        mov dword ptr ds : [eax + 8] , ecx
-        popad
-    }
+    MSR_REGISTER_T value;
+
+    memcpy(&value, buffer, sizeof(MSR_REGISTER_T));
+    printf("Read: 0x%llx\n", value);
 }
-#endif
