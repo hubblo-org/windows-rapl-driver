@@ -15,12 +15,6 @@ Environment:
 --*/
 
 #include <ntddk.h>
-#include <wdf.h>
-#include <initguid.h>
-
-#include "device.h"
-#include "queue.h"
-#include "trace.h"
 
 #define DEVICE_NAME L"\\Device\\ScaphandreDriver"
 #define DEVICE_SYM_NAME L"\\DosDevices\\ScaphandreDriver"
@@ -32,8 +26,6 @@ EXTERN_C_START
 //
 
 DRIVER_INITIALIZE DriverEntry;
-EVT_WDF_DRIVER_DEVICE_ADD RAPLDrvEvtDeviceAdd;
-EVT_WDF_OBJECT_CONTEXT_CLEANUP RAPLDrvEvtDriverContextCleanup;
 
 EXTERN_C_END
 
