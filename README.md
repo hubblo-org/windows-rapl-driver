@@ -34,6 +34,8 @@
 - https://www.intel.com/content/www/us/en/developer/articles/tool/power-gadget.html#inpage-nav-12
 - https://github.com/Microsoft/Windows-driver-samples
 - https://www.osronline.com/article.cfm%5Earticle=229.htm
+- https://fr.adasbcc.org/driver-blocked-from-loading-fix-3085
+- https://www.codeproject.com/articles/13090/building-and-deploying-a-basic-wdf-kernel-mode-dri
 
 Fichiers intéressants dans le noyau linux :
 - drivers/powercap/intel_rapl_msr.c
@@ -64,3 +66,9 @@ Pour pallier cela, la fonction __cpuid__ est écrite en pur assembleur en respec
 
 Enfin, pour compiler l'agent en incluant la fonction __cpuid__, il suffit de faire selon l'architecture :
  - x86_64 : x86_64-w64-mingw32-g++ RAPLAgent.cpp -s cpuid_x86_64.obj -o RAPLAgent.exe
+ 
+# Q & A
+
+### The code execution cannot proceed because MSVCP140D.dll was not found. Reinstalling the program may fix the problem.
+
+TODO
