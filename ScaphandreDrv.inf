@@ -1,0 +1,40 @@
+;
+; ScaphandreDrv.inf
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=System
+ClassGuid={4d36e97d-e325-11ce-bfc1-08002be10318}
+Provider=%ManufacturerName%
+DriverVer = 01/18/2022,1.0.0.0
+CatalogFile=ScaphandreDrv.cat
+PnpLockdown=1
+
+[DestinationDirs]
+DefaultDestDir = 13
+
+[SourceDisksNames]
+1 = %DiskName%,,,%13%
+
+[SourceDisksFiles]
+ScaphandreDrv.sys = 1
+
+[DefaultInstall.NTamd64]
+CopyFiles = @ScaphandreDrv.sys
+
+[DefaultInstall.NTamd64.Services]
+AddService = %ServiceName%,0x800,ScaphandreDrvService ; SPSVCSINST_STARTSERVICE
+
+[ScaphandreDrvService]
+DisplayName=%ServiceName%
+Description="Service that handles Scapahandre driver"
+ServiceType=2 ; SERVICE_FILE_SYSTEM_DRIVER
+StartType=1 ; SERVICE_SYSTEM_START
+ErrorControl=1 ; SERVICE_ERROR_NORMAL
+ServiceBinary=%13%\ScaphandreDrv.sys
+
+[Strings]
+ManufacturerName="Hubblo-Org"
+DiskName="ScaphandreDrv Source Disk"
+ServiceName="Scaphandre Driver Service"
