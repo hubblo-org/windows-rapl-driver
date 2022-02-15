@@ -1,4 +1,7 @@
-## Sources
+# Windows driver for RAPL metrics gathering
+
+## External documentation we used
+
 - https://github.com/intel/powergov
 - https://community.intel.com/t5/Software-Tuning-Performance/RAPL-for-energy-measurement/td-p/919723
 - www.eecs.berkeley.edu/Pubs/TechRpts/2012/EECS-2012-168.pdf
@@ -42,7 +45,7 @@ Fichiers intéressants dans le noyau linux :
 - arch/x86:lib/msr_smp.c
 
 
-# Cross compilation MinGW
+## Cross compilation MinGW
 
 Prérequis :
 - x86_64-w64-mingw32-g++
@@ -51,7 +54,7 @@ Compilation :
 x86_64-w64-mingw32-g++ DriverLoader.cpp -o DriverLoader.exe
 
 
-# Compilation CPUID
+## Compilation CPUID
 
 Le code qui appelle les informations du constructeur du CPU (via l'usage de l'instruction CPUID)
 emploie de l'assembleur "inliné".
@@ -66,9 +69,5 @@ Pour pallier cela, la fonction __cpuid__ est écrite en pur assembleur en respec
 
 Enfin, pour compiler l'agent en incluant la fonction __cpuid__, il suffit de faire selon l'architecture :
  - x86_64 : x86_64-w64-mingw32-g++ RAPLAgent.cpp -s cpuid_x86_64.obj -o RAPLAgent.exe
- 
-# Q & A
 
-### The code execution cannot proceed because MSVCP140D.dll was not found. Reinstalling the program may fix the problem.
-
-TODO
+## Q & A
