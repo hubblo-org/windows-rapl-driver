@@ -39,6 +39,8 @@
 - https://www.osronline.com/article.cfm%5Earticle=229.htm
 - https://fr.adasbcc.org/driver-blocked-from-loading-fix-3085
 - https://www.codeproject.com/articles/13090/building-and-deploying-a-basic-wdf-kernel-mode-dri
+- https://www.digicert.com/kb/code-signing/signcode-signtool-command-line.htm
+- https://www.techpout.com/update-drivers-using-command-prompt-in-windows-10/
 
 Fichiers intéressants dans le noyau linux :
 - drivers/powercap/intel_rapl_msr.c
