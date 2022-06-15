@@ -114,10 +114,19 @@ NTSTATUS DispatchDeviceControl(PDEVICE_OBJECT device, PIRP irp)
     {
         /* MSR register codes provided by userland must not exceed 8 bytes */
         memcpy(&msrRegister, irp->AssociatedIrp.SystemBuffer, sizeof(ULONGLONG));
-        msrResult = __readmsr(msrRegister);
-        memcpy(irp->AssociatedIrp.SystemBuffer, &msrResult, sizeof(ULONGLONG));
-        ntStatus = STATUS_SUCCESS;
-        irp->IoStatus.Information = sizeof(ULONGLONG);
+        if (validate_msr_lookup(msrRegister) != 0)
+        {
+            DbgPrint("Requested MSR register (%08x) access is not allowed!\n", msrRegister);
+            ntStatus = STATUS_INVALID_DEVICE_REQUEST;
+        }
+        else
+        {
+            /* Call readmsr instruction */
+            msrResult = __readmsr(msrRegister);
+            memcpy(irp->AssociatedIrp.SystemBuffer, &msrResult, sizeof(ULONGLONG));
+            ntStatus = STATUS_SUCCESS;
+            irp->IoStatus.Information = sizeof(ULONGLONG);
+        }
     }
     else
     {
