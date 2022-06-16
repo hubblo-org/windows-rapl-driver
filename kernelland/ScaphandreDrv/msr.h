@@ -38,6 +38,6 @@ typedef enum {
 
 static e_machine_type machine_type;
 
-int validate_msr_lookup(ULONGLONG msrRegister);
+int validate_msr_lookup(unsigned __int64 msrRegister);
 
 #endif /* _MSR_H */

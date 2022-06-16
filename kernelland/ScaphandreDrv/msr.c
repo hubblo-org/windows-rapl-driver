@@ -1,6 +1,6 @@
 #include "msr.h"
 
-int validate_msr_lookup(ULONGLONG msrRegister)
+int validate_msr_lookup(unsigned __int64 msrRegister)
 {
     int err;
 

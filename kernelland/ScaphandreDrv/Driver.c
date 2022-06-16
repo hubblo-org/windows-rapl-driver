@@ -54,9 +54,9 @@ NTSTATUS DispatchCreate(PDEVICE_OBJECT device, PIRP irp)
     /* Lookup CPU information */
     memset(manufacturer, 0, sizeof(manufacturer));
     __cpuid(cpu_regs, 0);
-    memcpy(manufacturer, &cpu_regs[1], sizeof(uint32_t));
-    memcpy(manufacturer + sizeof(uint32_t), &cpu_regs[3], sizeof(uint32_t));
-    memcpy(manufacturer + 2 * sizeof(uint32_t), &cpu_regs[2], sizeof(uint32_t));
+    memcpy(manufacturer, &cpu_regs[1], sizeof(unsigned __int32));
+    memcpy(manufacturer + sizeof(unsigned __int32), &cpu_regs[3], sizeof(unsigned __int32));
+    memcpy(manufacturer + 2 * sizeof(unsigned __int32), &cpu_regs[2], sizeof(unsigned __int32));
 
     if (strncmp(manufacturer, "GenuineIntel", sizeof(manufacturer) - 1) == 0)
         machine_type = E_MACHINE_INTEL;
