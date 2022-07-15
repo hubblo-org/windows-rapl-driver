@@ -1,5 +1,32 @@
 # Windows driver for RAPL metrics gathering
 
+## Cross compilation MinGW
+
+Dependencies:
+- x86_64-w64-mingw32-g++
+
+Compilation:
+x86_64-w64-mingw32-g++ DriverLoader.cpp -o DriverLoader.exe
+
+## Compilation CPUID
+
+Code getting CPU manufacturer's informations (through CPUID) uses inlined assembly.
+
+To compile on Linux, we need to tell GCC to use the Intel syntax and not the At&T one. We also need to specify we don't want an axecutable with independant position.
+
+Example : gcc -masm=intel -no-pie cpuid.c -o cpuid
+
+To compile on Windows, we can inline 32 bit assembly but not 64 bit (MSVC compiler doesn't support it).
+
+To fix this, the __cpuid__ function is written in pure assembly matching the Windows ABI (x86 and x86_64). To compile, use those commands :
+ - x86 : nasm -f win32 cpuid_x86.nasm -o cpuid_x86.obj
+ - x86_64 : nasm -f win64 cpuid_x86_64.nasm -o cpuid_x86_64.obj
+
+To compile the agent, including the __cpuid__ function, do it according to the architecture :
+ - x86_64 : x86_64-w64-mingw32-g++ RAPLAgent.cpp -s cpuid_x86_64.obj -o RAPLAgent.exe
+
+## Q & A
+
 ## External documentation we used
 
 - https://github.com/intel/powergov
@@ -45,31 +72,3 @@
 Fichiers intéressants dans le noyau linux :
 - drivers/powercap/intel_rapl_msr.c
 - arch/x86:lib/msr_smp.c
-
-
-## Cross compilation MinGW
-
-Prérequis :
-- x86_64-w64-mingw32-g++
-
-Compilation :
-x86_64-w64-mingw32-g++ DriverLoader.cpp -o DriverLoader.exe
-
-
-## Compilation CPUID
-
-Le code qui appelle les informations du constructeur du CPU (via l'usage de l'instruction CPUID)
-emploie de l'assembleur "inliné".
-
-Pour compiler ce code sous Linux, il faut préciser à GCC d'utiliser la syntaxe Intel et non pas AT&T. Il faut aussi préciser que l'on ne souhaite pas un exécutable à position indépendante.
-Exemple : gcc -masm=intel -no-pie cpuid.c -o cpuid
-
-Pour compiler sous Windows, on peut inliner de l'assembleur en 32 bit mais pas en 64 bit (le compilateur MSVC ne le supporte pas).
-Pour pallier cela, la fonction __cpuid__ est écrite en pur assembleur en respectant l'ABI Windows (x86 et x86_64). Pour compiler cette fonction, il faut utiliser les commandes suivantes :
- - x86 : nasm -f win32 cpuid_x86.nasm -o cpuid_x86.obj
- - x86_64 : nasm -f win64 cpuid_x86_64.nasm -o cpuid_x86_64.obj
-
-Enfin, pour compiler l'agent en incluant la fonction __cpuid__, il suffit de faire selon l'architecture :
- - x86_64 : x86_64-w64-mingw32-g++ RAPLAgent.cpp -s cpuid_x86_64.obj -o RAPLAgent.exe
-
-## Q & A
