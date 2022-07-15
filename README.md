@@ -1,5 +1,9 @@
 # Windows driver for RAPL metrics gathering
 
+## Installation
+
+TODO in debug mode
+
 ## Cross compilation MinGW
 
 Dependencies:
