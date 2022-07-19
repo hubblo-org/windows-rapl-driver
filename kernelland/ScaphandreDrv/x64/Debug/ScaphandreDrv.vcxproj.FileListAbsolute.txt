@@ -1,0 +1,1 @@
+C:\Users\nulse\Documents\GitHub\windows-rapl-driver\kernelland\ScaphandreDrv\x64\Debug\ScaphandreDrv.sys

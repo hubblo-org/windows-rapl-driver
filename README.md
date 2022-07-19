@@ -71,4 +71,10 @@ Enfin, pour compiler l'agent en incluant la fonction __cpuid__, il suffit de fai
 
 ### The code execution cannot proceed because MSVCP140D.dll was not found. Reinstalling the program may fix the problem.
 
-TODO
+build in release mode then retry !
+
+### How to build ?
+
+"F:\Windows Kits\10\bin\x86\Inf2Cat.exe" /driver:c:\Users\nulse\Documents\GitHub\test\ /os:10_19H1_X64,10_RS5_X64,ServerRS5_X64,10_RS4_X64
+
+see https://docs.microsoft.com/en-us/windows-hardware/drivers/devtest/inf2cat

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>C:\Users\nulse\Documents\GitHub\windows-rapl-driver\kernelland\ScaphandreDrv\Debug\ScaphandreDrv.sys</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>C:\Users\nulse\Documents\GitHub\windows-rapl-driver\kernelland\ScaphandreDrv\Debug\ScaphandreDriverPackage</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles />
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
+</Project>

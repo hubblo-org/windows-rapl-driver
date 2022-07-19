@@ -1,0 +1,26 @@
+[Version] 
+Signature = "$Windows NT$" 
+Class=Sample
+ClassGUID={C3077FCD-9C3C-482f-9317-460712F23EFA}
+Provider=%MFGNAME% 
+CatalogFile=basic.cat
+DriverVer= 01/21/2005
+;copyright Bruno van Dooren
+[Manufacturer]
+%MFGNAME%=DeviceList
+[SourceDisksNames]
+1=%INST_DISK_NAME%
+[SourceDisksFiles]
+basic.sys=1,objchk_wxp_x86\i386\,
+WdfCoinstaller01000.dll=1,,
+[DestinationDirs]
+DefaultDestDir=10,System32\drivers              
+ClassInstall32_CopyFiles=11
+CoInstaller_CopyFiles = 11
+[DeviceList]
+%DEV_DESCRIPTION%=DriverInstall,USB\VID_0547&PID_1002
+[DriverInstall.ntx86]
+DriverVer=27/12/2005,1.0.0.1
+CopyFiles=DriverCopyFiles
+[DriverCopyFiles]
+basic.sys,,,2
