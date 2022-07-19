@@ -43,7 +43,13 @@ If running properly it should show a line like :
 	
 TODO
 
-## Cross compilation MinGW
+## Context
+
+This driver has been developped for a specific use case : enabling [Scaphandre](https://github.com/hubblo-org/scaphandre) on Windows.
+
+Please have a look at [those slides](https://github.com/hubblo-org/scaphandre/files/8601923/Boavizta.-.Scaphandre_RAPL_Windows.pdf) for a better understanding of how and why this driver has been developped.
+
+## Cross compilation MinGW (OUTDATED)
 
 Dependencies:
 - x86_64-w64-mingw32-g++
@@ -51,7 +57,7 @@ Dependencies:
 Compilation:
 x86_64-w64-mingw32-g++ DriverLoader.cpp -o DriverLoader.exe
 
-## Compilation CPUID
+## Compilation CPUID (OUTDATED)
 
 Code getting CPU manufacturer's informations (through CPUID) uses inlined assembly.
 
