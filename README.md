@@ -1,8 +1,47 @@
 # Windows driver for RAPL metrics gathering
 
-## Installation
+## Installation (for testing/troubleshooting purposes, in test mode)
 
-TODO in debug mode
+### Enable test mode
+
+For now, the driver is unsigned, so you need to put windows in test mode (allowing custom drivers to run).
+
+To do this, open a command prompt **as an administrator** and run :
+
+	bcdedit.exe -set TESTSIGNING ON
+	
+Then restart the computer or server.
+
+Once restarted, if on a desktop, you should have some text written on the bottom right corner of the desktop view with **"Test Mode"** displayed.
+
+To disable test mode just open another command prompt with adminstrator access and run :
+
+	bcdedit.exe -set TESTSIGNING OFF
+
+### Installing the driver
+
+First download or [compile](#Compilation) :
+- DriverLoader.exe
+- ScaphandreDrv.sys
+
+You need those files in the same folder.
+
+Then run, in an adminstrator command prompt :
+
+	DriverLoader.exe install
+
+At any time you could check for the state of the service giving access to the driver on your system, with this command :
+
+	driverquery /v | grep -i scaph
+	
+If running properly it should show a line like :
+
+	Scaphandre Dr Scaphandre Driver Serv Scaphandre Driver Serv File System    System            Running    OK         TRUE             FALSE                  0                 4□096       0          14/01/2022 16:01:37    C:\WINDOWS\system32\DRIVERS\ScaphandreDrv.sys    4□096
+
+	
+## Compilation
+	
+TODO
 
 ## Cross compilation MinGW
 
