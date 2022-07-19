@@ -12,19 +12,28 @@ CatalogFile=ScaphandreDrv.cat
 PnpLockdown=1
 
 [DestinationDirs]
-DefaultDestDir = 13
+DefaultDestDir = 12
 
 [SourceDisksNames]
-1 = %DiskName%,,,%13%
+1 = %DiskName%,,,""
 
 [SourceDisksFiles]
-ScaphandreDrv.sys = 1
+ScaphandreDrv.sys = 1,,
 
-[DefaultInstall.NTamd64]
-CopyFiles = @ScaphandreDrv.sys
+[DefaultInstall.ntamd64]
+CopyFiles = ScaphandreFiles
 
-[DefaultInstall.NTamd64.Services]
+[DefaultInstall.ntamd64.Services]
 AddService = %ServiceName%,0x800,ScaphandreDrvService ; SPSVCSINST_STARTSERVICE
+
+[DefaultUninstall.ntamd64]
+DelFiles = ScaphandreFiles
+
+[DefaultUninstall.ntamd64.Services]
+DelService = %ServiceName%,0x200
+
+[ScaphandreFiles]
+ScaphandreDrv.sys,,,2
 
 [ScaphandreDrvService]
 DisplayName=%ServiceName%
@@ -32,7 +41,7 @@ Description="Service that handles Scapahandre driver"
 ServiceType=2 ; SERVICE_FILE_SYSTEM_DRIVER
 StartType=1 ; SERVICE_SYSTEM_START
 ErrorControl=1 ; SERVICE_ERROR_NORMAL
-ServiceBinary=%13%\ScaphandreDrv.sys
+ServiceBinary=%12%\ScaphandreDrv.sys
 
 [Strings]
 ManufacturerName="Hubblo-Org"

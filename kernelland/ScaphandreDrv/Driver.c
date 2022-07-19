@@ -1,4 +1,5 @@
 #include "driver.h"
+#include "msr.h"
 #include <intrin.h>
 
 #ifdef ALLOC_PRAGMA
@@ -45,7 +46,27 @@ void DriverUnload(PDRIVER_OBJECT driver)
 
 NTSTATUS DispatchCreate(PDEVICE_OBJECT device, PIRP irp)
 {
+    int cpu_regs[4];
+    char manufacturer[13];
+
     DbgPrint("Creating driver %s... \n", device->DriverObject->DriverName);
+
+    /* Lookup CPU information */
+    memset(manufacturer, 0, sizeof(manufacturer));
+    __cpuid(cpu_regs, 0);
+    memcpy(manufacturer, &cpu_regs[1], sizeof(unsigned __int32));
+    memcpy(manufacturer + sizeof(unsigned __int32), &cpu_regs[3], sizeof(unsigned __int32));
+    memcpy(manufacturer + 2 * sizeof(unsigned __int32), &cpu_regs[2], sizeof(unsigned __int32));
+
+    if (strncmp(manufacturer, "GenuineIntel", sizeof(manufacturer) - 1) == 0)
+        machine_type = E_MACHINE_INTEL;
+    else if (strncmp(manufacturer, "AMDisbetter!", sizeof(manufacturer) - 1) == 0)
+        machine_type = E_MACHINE_AMD;
+    else if (strncmp(manufacturer, "AuthenticAMD", sizeof(manufacturer) - 1) == 0)
+        machine_type = E_MACHINE_AMD;
+    else
+        machine_type = E_MACHINE_UNK;
+
     irp->IoStatus.Status = STATUS_SUCCESS;
     irp->IoStatus.Information = STATUS_SUCCESS;
     IofCompleteRequest(irp, IO_NO_INCREMENT);
@@ -93,10 +114,19 @@ NTSTATUS DispatchDeviceControl(PDEVICE_OBJECT device, PIRP irp)
     {
         /* MSR register codes provided by userland must not exceed 8 bytes */
         memcpy(&msrRegister, irp->AssociatedIrp.SystemBuffer, sizeof(ULONGLONG));
-        msrResult = __readmsr(msrRegister);
-        memcpy(irp->AssociatedIrp.SystemBuffer, &msrResult, sizeof(ULONGLONG));
-        ntStatus = STATUS_SUCCESS;
-        irp->IoStatus.Information = sizeof(ULONGLONG);
+        if (validate_msr_lookup(msrRegister) != 0)
+        {
+            DbgPrint("Requested MSR register (%08x) access is not allowed!\n", msrRegister);
+            ntStatus = STATUS_INVALID_DEVICE_REQUEST;
+        }
+        else
+        {
+            /* Call readmsr instruction */
+            msrResult = __readmsr(msrRegister);
+            memcpy(irp->AssociatedIrp.SystemBuffer, &msrResult, sizeof(ULONGLONG));
+            ntStatus = STATUS_SUCCESS;
+            irp->IoStatus.Information = sizeof(ULONGLONG);
+        }
     }
     else
     {
