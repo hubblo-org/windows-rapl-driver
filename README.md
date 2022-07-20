@@ -1,3 +1,11 @@
+<h1 align="center">
+  windows-rapl-driver
+</h1>
+
+<p align="center">
+    <img src="https://repository-images.githubusercontent.com/421079628/f695abc0-c8e6-46a3-a6f4-6c7c0f617b87" width="800">
+</p>
+
 # Windows driver for RAPL metrics gathering
 
 ## Installation (for testing/troubleshooting purposes, in test mode)
