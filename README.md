@@ -49,7 +49,20 @@ If running properly it should show a line like :
 	
 ## Compilation
 	
-TODO
+### Windows 10
+
+Install Visual Studio 2019
+
+### Windows 11
+
+Install Visual Studio 2022
+
+According to [this documentation](https://learn.microsoft.com/en-us/windows-hardware/drivers/download-the-wdk):
+
+- [Install the Windows 11 SDK](https://developer.microsoft.com/en-us/windows/downloads/windows-sdk/)
+- [Install the Windows 11 WDK (Windows Driver Kit)](https://go.microsoft.com/fwlink/?linkid=2196230)
+
+Optionnal : [install the EWDK](https://learn.microsoft.com/en-us/legal/windows/hardware/enterprise-wdk-license-2022)
 
 ## Context
 
