@@ -17,7 +17,7 @@ For now, the driver is unsigned, so you need to put windows in test mode (allowi
 To do this, open a command prompt **as an administrator** and run :
 
 	bcdedit.exe -set TESTSIGNING ON
-	
+
 Then restart the computer or server.
 
 Once restarted, if on a desktop, you should have some text written on the bottom right corner of the desktop view with **"Test Mode"** displayed.
@@ -41,14 +41,14 @@ Then run, in an adminstrator command prompt :
 At any time you could check for the state of the service giving access to the driver on your system, with this command :
 
 	driverquery /v | grep -i scaph
-	
+
 If running properly it should show a line like :
 
 	Scaphandre Dr Scaphandre Driver Serv Scaphandre Driver Serv File System    System            Running    OK         TRUE             FALSE                  0                 4□096       0          14/01/2022 16:01:37    C:\WINDOWS\system32\DRIVERS\ScaphandreDrv.sys    4□096
 
-	
+
 ## Compilation
-	
+
 ### Windows 10
 
 Install Visual Studio 2019
@@ -63,6 +63,18 @@ According to [this documentation](https://learn.microsoft.com/en-us/windows-hard
 - [Install the Windows 11 WDK (Windows Driver Kit)](https://go.microsoft.com/fwlink/?linkid=2196230)
 
 Optionnal : [install the EWDK](https://learn.microsoft.com/en-us/legal/windows/hardware/enterprise-wdk-license-2022)
+
+### Compile from GNU/Linux (Ubuntu 22.04), run on windows
+
+Compile DriverLoader.exe in `userland/Service`:
+
+```
+cd userland/Service
+
+sudo apt install g++-mingw-w64 g++-mingw-w64-x86-64-win32 g++-mingw-w64-x86-64
+
+x86_64-w64-mingw32-cpp DriverLoader.cpp -I/usr/x86_64-w64-mingw32/include/ddk/ -I/usr/x86_64-w64-mingw32/include/ --sysroot=. -o DriverLoader.exe
+```
 
 ## Context
 
