@@ -73,7 +73,7 @@ cd userland/Service
 
 sudo apt install g++-mingw-w64 g++-mingw-w64-x86-64-win32 g++-mingw-w64-x86-64
 
-x86_64-w64-mingw32-cpp DriverLoader.cpp -I/usr/x86_64-w64-mingw32/include/ddk/ -I/usr/x86_64-w64-mingw32/include/ --sysroot=. -o DriverLoader.exe
+x86_64-w64-mingw32-g++ DriverLoader.cpp -I/usr/x86_64-w64-mingw32/include/ddk/ -I/usr/x86_64-w64-mingw32/include/ --sysroot=. -o DriverLoader.exe -Wall -pedantic
 ```
 
 ## Context
