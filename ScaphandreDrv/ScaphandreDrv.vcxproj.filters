@@ -19,11 +19,22 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <Inf Include="ScaphandreDrv.inf">
+      <Filter>Driver Files</Filter>
+    </Inf>
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="Driver.c">
+      <Filter>Driver Files</Filter>
+    </ClCompile>
+    <ClCompile Include="msr.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="msr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Driver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
