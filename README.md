@@ -78,6 +78,16 @@ On the top of the VS Window, select "Release" as a target and "x64" as a target 
 
 Then "Build" > "Build Solution".
 
+To build DriverLoader :
+
+Right Click on the Solution > Add > New Projet > Empty Project
+
+On the new Project "DriverLoader" inside the solution, right click > add > existing item, look for DriverLoader.cpp.
+
+Right click on DriverLoader in the right panel > Properties > Advanced, then ensure "Character Set" is set as "Use Multi-Byte Character Set".
+
+Build > Build Solution ( same target and platform as ScaphandreDrv ).
+
 ### Compile from GNU/Linux (Ubuntu 22.04), run on windows
 
 Compile DriverLoader.exe in `userland/Service`:
