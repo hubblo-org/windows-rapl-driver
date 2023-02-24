@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DriverLoader", "DriverLoade
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ScaphandreDrv", "ScaphandreDrv\ScaphandreDrv.vcxproj", "{6D000817-2F66-4AB4-9CE9-95695C7AD1A5}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ScaphandreDrvInstaller", "ScaphandreDrvInstaller\ScaphandreDrvInstaller.vdproj", "{7D4378FE-54E6-4593-A137-F3AD6653222F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -55,6 +57,14 @@ Global
 		{6D000817-2F66-4AB4-9CE9-95695C7AD1A5}.Release|x86.ActiveCfg = Release|Win32
 		{6D000817-2F66-4AB4-9CE9-95695C7AD1A5}.Release|x86.Build.0 = Release|Win32
 		{6D000817-2F66-4AB4-9CE9-95695C7AD1A5}.Release|x86.Deploy.0 = Release|Win32
+		{7D4378FE-54E6-4593-A137-F3AD6653222F}.Debug|ARM.ActiveCfg = Debug
+		{7D4378FE-54E6-4593-A137-F3AD6653222F}.Debug|ARM64.ActiveCfg = Debug
+		{7D4378FE-54E6-4593-A137-F3AD6653222F}.Debug|x64.ActiveCfg = Debug
+		{7D4378FE-54E6-4593-A137-F3AD6653222F}.Debug|x86.ActiveCfg = Debug
+		{7D4378FE-54E6-4593-A137-F3AD6653222F}.Release|ARM.ActiveCfg = Release
+		{7D4378FE-54E6-4593-A137-F3AD6653222F}.Release|ARM64.ActiveCfg = Release
+		{7D4378FE-54E6-4593-A137-F3AD6653222F}.Release|x64.ActiveCfg = Release
+		{7D4378FE-54E6-4593-A137-F3AD6653222F}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
