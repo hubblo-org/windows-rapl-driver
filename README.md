@@ -92,7 +92,7 @@ Right click on DriverLoader in the right panel > Properties > Advanced, then ens
 
 Build > Build Solution ( same target and platform as ScaphandreDrv ).
 
-### Compile from GNU/Linux (Ubuntu 22.04), run on windows
+### Compile from GNU/Linux (Ubuntu 22.04), run on windows (not recommended, as this is static compilation)
 
 Compile DriverLoader.exe in `userland/Service`:
 
