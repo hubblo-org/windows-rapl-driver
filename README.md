@@ -37,6 +37,10 @@ You need those files in the same folder.
 Then run, in an adminstrator command prompt :
 
 	DriverLoader.exe install
+	
+Start the service :
+
+	DriverLoader.exe start
 
 At any time you could check for the state of the service giving access to the driver on your system, with this command :
 
