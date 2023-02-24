@@ -1,5 +1,4 @@
-#define _AMD64_
-#include "driver.h"
+#include "Driver.h"
 #include "msr.h"
 #include <intrin.h>
 
