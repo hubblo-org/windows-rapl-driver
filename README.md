@@ -17,7 +17,7 @@ For now, the driver is unsigned, so you need to put windows in test mode (allowi
 To do this, open a command prompt **as an administrator** and run :
 
 	bcdedit.exe -set TESTSIGNING ON
-	
+
 Then restart the computer or server.
 
 Once restarted, if on a desktop, you should have some text written on the bottom right corner of the desktop view with **"Test Mode"** displayed.
@@ -37,18 +37,22 @@ You need those files in the same folder.
 Then run, in an adminstrator command prompt :
 
 	DriverLoader.exe install
+	
+Start the service :
+
+	DriverLoader.exe start
 
 At any time you could check for the state of the service giving access to the driver on your system, with this command :
 
 	driverquery /v | grep -i scaph
-	
+
 If running properly it should show a line like :
 
 	Scaphandre Dr Scaphandre Driver Serv Scaphandre Driver Serv File System    System            Running    OK         TRUE             FALSE                  0                 4□096       0          14/01/2022 16:01:37    C:\WINDOWS\system32\DRIVERS\ScaphandreDrv.sys    4□096
 
-	
+
 ## Compilation
-	
+
 ### Windows 10
 
 Install Visual Studio 2019
@@ -63,6 +67,42 @@ According to [this documentation](https://learn.microsoft.com/en-us/windows-hard
 - [Install the Windows 11 WDK (Windows Driver Kit)](https://go.microsoft.com/fwlink/?linkid=2196230)
 
 Optionnal : [install the EWDK](https://learn.microsoft.com/en-us/legal/windows/hardware/enterprise-wdk-license-2022)
+
+Right clik on ScaphandreDrv in the right panel, in General Properties, look for the "Platform Toolset" field. It should say "WindowsKernelModeDriver10.0".
+
+If the WDK doesn't appear in ScaphandreDrv Properties as a Platform Toolset choice, look for the vsix runner that should have a path like :
+
+```
+ C:\Program Files (x86)\Windows Kits\10\Vsix\VS2022\10.0.22621.382\WDK.vsix.
+```
+
+Close Visual Studio 2022, run the vsix runner.
+
+On the top of the VS Window, select "Release" as a target and "x64" as a target platform.
+
+Then "Build" > "Build Solution".
+
+To build DriverLoader :
+
+Right Click on the Solution > Add > New Projet > Empty Project
+
+On the new Project "DriverLoader" inside the solution, right click > add > existing item, look for DriverLoader.cpp.
+
+Right click on DriverLoader in the right panel > Properties > Advanced, then ensure "Character Set" is set as "Use Multi-Byte Character Set".
+
+Build > Build Solution ( same target and platform as ScaphandreDrv ).
+
+### Compile from GNU/Linux (Ubuntu 22.04), run on windows
+
+Compile DriverLoader.exe in `userland/Service`:
+
+```
+cd userland/Service
+
+sudo apt install g++-mingw-w64 g++-mingw-w64-x86-64-win32 g++-mingw-w64-x86-64
+
+x86_64-w64-mingw32-g++ DriverLoader.cpp -I/usr/x86_64-w64-mingw32/include/ddk/ -I/usr/x86_64-w64-mingw32/include/ --sysroot=. -o DriverLoader.exe -Wall -pedantic
+```
 
 ## Context
 
