@@ -74,6 +74,10 @@ If the WDK doesn't appear in ScaphandreDrv Properties as a Platform Toolset choi
 
 Close Visual Studio 2022, run the vsix runner.
 
+On the top of the VS Window, select "Release" as a target and "x64" as a target platform.
+
+Then "Build" > "Build Solution".
+
 ### Compile from GNU/Linux (Ubuntu 22.04), run on windows
 
 Compile DriverLoader.exe in `userland/Service`:
