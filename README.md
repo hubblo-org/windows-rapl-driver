@@ -64,6 +64,16 @@ According to [this documentation](https://learn.microsoft.com/en-us/windows-hard
 
 Optionnal : [install the EWDK](https://learn.microsoft.com/en-us/legal/windows/hardware/enterprise-wdk-license-2022)
 
+Right clik on ScaphandreDrv in the right panel, in General Properties, look for the "Platform Toolset" field. It should say "WindowsKernelModeDriver10.0".
+
+If the WDK doesn't appear in ScaphandreDrv Properties as a Platform Toolset choice, look for the vsix runner that should have a path like :
+
+```
+ C:\Program Files (x86)\Windows Kits\10\Vsix\VS2022\10.0.22621.382\WDK.vsix.
+```
+
+Close Visual Studio 2022, run the vsix runner.
+
 ### Compile from GNU/Linux (Ubuntu 22.04), run on windows
 
 Compile DriverLoader.exe in `userland/Service`:
