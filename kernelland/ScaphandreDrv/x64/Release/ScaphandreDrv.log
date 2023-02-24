@@ -1,8 +1,0 @@
-﻿  Building 'ScaphandreDrv' with toolset 'WindowsKernelModeDriver10.0' and the 'Desktop' target platform.
-  Driver.c
-  ScaphandreDrv.vcxproj -> C:\Users\nulse\Documents\GitHub\windows-rapl-driver\kernelland\ScaphandreDrv\x64\Release\ScaphandreDrv.sys
-  Done Adding Additional Store
-  Successfully signed: C:\Users\nulse\Documents\GitHub\windows-rapl-driver\kernelland\ScaphandreDrv\x64\Release\ScaphandreDrv.sys
-  
-  Inf2Cat task was skipped as there were no inf files to process
-  

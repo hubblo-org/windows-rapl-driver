@@ -1,0 +1,6 @@
+*.exe
+*.sys
+.vs
+Debug/
+Release/
+x64/

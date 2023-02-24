@@ -1,0 +1,6 @@
+﻿  DriverLoader.cpp
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 21 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  DriverLoader.vcxproj -> C:\Users\bpeti\source\repos\windows-rapl-driver\ScaphandreDrv\x64\Release\DriverLoader.exe
