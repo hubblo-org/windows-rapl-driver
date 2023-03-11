@@ -171,6 +171,7 @@ To compile the agent, including the __cpuid__ function, do it according to the a
 
 ## External documentation we used
 
+- https://github.com/MicrosoftDocs/windows-driver-docs/blob/staging/windows-driver-docs-pr/install/signature-categories-and-driver-installation.md
 - https://github.com/intel/powergov
 - https://community.intel.com/t5/Software-Tuning-Performance/RAPL-for-energy-measurement/td-p/919723
 - www.eecs.berkeley.edu/Pubs/TechRpts/2012/EECS-2012-168.pdf
