@@ -135,6 +135,14 @@ Then
 Then (as Administrator)
 
 	.\certmgr.exe /add "C:\Users\bpeti\source\repos\windows-rapl-driver\ScaphandreDrv\ScaphandreDrvTest.cer" /s /r localMachine root
+	
+Once the signing is proper, you should be able to install the driver with :
+
+	& "C:\Program Files (x86)\Windows Kits\10\Tools\10.0.22621.0\x64\devcon.exe" install .\ScaphandreDrv.inf root\SCAPHANDREDRV
+	
+If the signature is okay (even if untrusted), you should get this pop up window :
+	
+![unknown_publisher](https://user-images.githubusercontent.com/906428/224494859-a9a7f2f1-2152-4487-99ff-6daa963195a8.png)
 
 ## Context
 
