@@ -184,8 +184,8 @@ void _doInstall(void)
     srvHandle = GetOrCreateService(scHandle);
     if (srvHandle)
     {
-        MessageBox(NULL, "Scaphandre driver is already installed!", "Info", MB_OK | MB_ICONINFORMATION);
-        ExitProcess(ERROR_SERVICE_ALREADY_EXISTS);
+        //MessageBox(NULL, "Scaphandre driver is already installed!", "Info", MB_OK | MB_ICONINFORMATION);
+        ExitProcess(ERROR_SERVICE_OK);
     }
 
     srvHandle = GetOrCreateService(scHandle, TRUE);
