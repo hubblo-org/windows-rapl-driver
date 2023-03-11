@@ -104,6 +104,16 @@ sudo apt install g++-mingw-w64 g++-mingw-w64-x86-64-win32 g++-mingw-w64-x86-64
 x86_64-w64-mingw32-g++ DriverLoader.cpp -I/usr/x86_64-w64-mingw32/include/ddk/ -I/usr/x86_64-w64-mingw32/include/ --sysroot=. -o DriverLoader.exe -Wall -pedantic
 ```
 
+### Build an MSI package
+
+#### Setup
+
+In Visual Studio 2022 or 2019, open Extensions > Manage Extensions, then search for "Microsoft Visual Studio Installer Projects 2019|2022", then Download, close Visual Studtio.
+
+Then a VSIX installer should start. Restart Visual Studio.
+
+If the ScaphandreDrvInstaller project is displayed as incompatible, right click, then "Reload Project". Then Build.
+
 ## Context
 
 This driver has been developped for a specific use case : enabling [Scaphandre](https://github.com/hubblo-org/scaphandre) on Windows.
