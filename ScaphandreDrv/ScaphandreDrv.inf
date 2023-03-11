@@ -8,7 +8,8 @@ Class=System ; TODO: specify appropriate Class
 ClassGuid={4d36e97d-e325-11ce-bfc1-08002be10318} ; TODO: specify appropriate ClassGuid
 Provider=%ManufacturerName%
 CatalogFile=ScaphandreDrv.cat
-DriverVer= ; TODO: set DriverVer in stampinf property pages
+CatalogFile.NTAMD64=ScaphandreDrv.cat
+DriverVer = 03/11/2023,0.0.1.0
 PnpLockdown=1
 
 [DestinationDirs]
@@ -27,19 +28,19 @@ WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll=1 ; make sure the number matches with
 ;*****************************************
 
 [Manufacturer]
-%ManufacturerName%=Standard,NT$ARCH$
+%ManufacturerName%=Standard,NTAMD64
 
-[Standard.NT$ARCH$]
+[Standard.NTAMD64]
 %ScaphandreDrv.DeviceDesc%=ScaphandreDrv_Device, Root\ScaphandreDrv ; TODO: edit hw-id
 
-[ScaphandreDrv_Device.NT]
+[ScaphandreDrv_Device.NTAMD64]
 CopyFiles=Drivers_Dir
 
 [Drivers_Dir]
 ScaphandreDrv.sys
 
 ;-------------- Service installation
-[ScaphandreDrv_Device.NT.Services]
+[ScaphandreDrv_Device.NTAMD64.Services]
 AddService = ScaphandreDrv,%SPSVCINST_ASSOCSERVICE%, ScaphandreDrv_Service_Inst
 
 ; -------------- ScaphandreDrv driver install sections
@@ -50,28 +51,10 @@ StartType      = 3               ; SERVICE_DEMAND_START
 ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
 ServiceBinary  = %12%\ScaphandreDrv.sys
 
-;
-;--- ScaphandreDrv_Device Coinstaller installation ------
-;
-
-[ScaphandreDrv_Device.NT.CoInstallers]
-AddReg=ScaphandreDrv_Device_CoInstaller_AddReg
-CopyFiles=ScaphandreDrv_Device_CoInstaller_CopyFiles
-
-[ScaphandreDrv_Device_CoInstaller_AddReg]
-HKR,,CoInstallers32,0x00010000, "WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll,WdfCoInstaller"
-
-[ScaphandreDrv_Device_CoInstaller_CopyFiles]
-WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll
-
-[ScaphandreDrv_Device.NT.Wdf]
-KmdfService =  ScaphandreDrv, ScaphandreDrv_wdfsect
-[ScaphandreDrv_wdfsect]
-KmdfLibraryVersion = $KMDFVERSION$
 
 [Strings]
 SPSVCINST_ASSOCSERVICE= 0x00000002
-ManufacturerName="<Your manufacturer name>" ;TODO: Replace with your manufacturer name
+ManufacturerName="Hubblo" ;TODO: Replace with your manufacturer name
 DiskName = "ScaphandreDrv Installation Disk"
 ScaphandreDrv.DeviceDesc = "ScaphandreDrv Device"
 ScaphandreDrv.SVCDESC = "ScaphandreDrv Service"
