@@ -128,11 +128,11 @@ Then (need to change inf file to succeed with x64, TODO document this part)
 
 	.\Inf2Cat.exe /driver:C:\Users\bpeti\source\repos\windows-rapl-driver\ScaphandreDrv\ /os:10_X64
 
-THen
+Then
 
 	.\signtool.exe sign /v /fd sha256 /s PrivateCertStore /n hubblo.org "C:\Users\bpeti\source\repos\windows-rapl-driver\ScaphandreDrv\scaphandredrv.cat"
 	
-Then
+Then (as Administrator)
 
 	.\certmgr.exe /add "C:\Users\bpeti\source\repos\windows-rapl-driver\ScaphandreDrv\ScaphandreDrvTest.cer" /s /r localMachine root
 
