@@ -114,6 +114,28 @@ Then a VSIX installer should start. Restart Visual Studio.
 
 If the ScaphandreDrvInstaller project is displayed as incompatible, right click, then "Reload Project". Then Build.
 
+### Test-sign the driver (reference documentation is [here](https://learn.microsoft.com/en-us/windows-hardware/drivers/install/how-to-test-sign-a-driver-package))
+
+In C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64
+
+	.\MakeCert.exe -r -pe -ss PrivateCertStore -n CN=hubblo.org -eku 1.3.6.1.5.5.7.3.3 ScaphandreDrvTest.cer
+	
+In C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x86, when you already have an Inf file
+
+	.\stampinf.exe -f C:\Users\bpeti\source\repos\windows-rapl-driver\ScaphandreDrv\ScaphandreDrv.inf -d 03/11/2023 -v 0.0.1
+	
+Then (need to change inf file to succeed with x64, TODO document this part)
+
+	.\Inf2Cat.exe /driver:C:\Users\bpeti\source\repos\windows-rapl-driver\ScaphandreDrv\ /os:10_X64
+
+THen
+
+	.\signtool.exe sign /v /fd sha256 /s PrivateCertStore /n hubblo.org "C:\Users\bpeti\source\repos\windows-rapl-driver\ScaphandreDrv\scaphandredrv.cat"
+	
+Then
+
+	.\certmgr.exe /add "C:\Users\bpeti\source\repos\windows-rapl-driver\ScaphandreDrv\ScaphandreDrvTest.cer" /s /r localMachine root
+
 ## Context
 
 This driver has been developped for a specific use case : enabling [Scaphandre](https://github.com/hubblo-org/scaphandre) on Windows.
