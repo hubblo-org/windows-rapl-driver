@@ -1,6 +1,7 @@
 *.exe
 *.sys
 .vs
+UpgradeLog.htm
 Debug/
 Release/
 x64/
