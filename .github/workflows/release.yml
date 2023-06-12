@@ -26,8 +26,8 @@ jobs:
       - name: Install WDK
         run: .\wdksetup.exe /v /qn License=Yes
       - name: Check what is in C:\Program Files (x86)\Windows Kits
-        run: ls C:\Program Files (x86)\Windows Kits\
+        run: ls "C:\Program Files (x86)\Windows Kits\"
       - name: Setup WDK
         run: C:\Program Files (x86)\Windows Kits\10\Vsix\VS2022\10.0.22621.382\WDK.vsix
       - name: Check what is in C:\Program Files (x86)\Windows Kits\10\bin
-        run: ls C:\Program Files (x86)\Windows Kits\10\bin
+        run: ls "C:\Program Files (x86)\Windows Kits\10\bin"
