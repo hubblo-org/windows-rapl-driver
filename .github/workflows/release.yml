@@ -20,10 +20,10 @@ jobs:
       - name: Download Windows SDK
         run: Invoke-WebRequest -Uri https://scaphandre.s3.fr-par.scw.cloud/utils/winsdksetup_win11.exe -OutFile winsdksetup.exe 
       - name: Install SDK
-        run: winsdksetup.exe /s /v /qn License=Yes
+        run: .\winsdksetup.exe /s /v /qn License=Yes
       - name: Download Windows WDK
         run: Invoke-WebRequest -Uri https://scaphandre.s3.fr-par.scw.cloud/utils/wdksetup_win11.exe -OutFile wdksetup.exe 
       - name: Install WDK
-        run: wdksetup.exe /s /v /qn License=Yes
+        run: .\wdksetup.exe /s /v /qn License=Yes
         
 
