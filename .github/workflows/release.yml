@@ -2,12 +2,13 @@ name: Build Windows package
 
 on:
   push:
+    branches: [ "master" ]
     paths-ignore:
       - 'docs_src/**'
       - 'README.md'
       - 'CITATION'
       - 'CONTRIBUTING.md'
-    tags: [ 'v*.*.*', 'dev*.*.*' ]
+    #tags: [ 'v*.*.*', 'dev*.*.*' ]
 
 jobs:
   build_rpm:
