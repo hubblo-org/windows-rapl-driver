@@ -11,8 +11,8 @@ on:
     #tags: [ 'v*.*.*', 'dev*.*.*' ]
 
 jobs:
-  build_rpm:
-    name: Build RPM package
+  sign_driver:
+    name: Sign Driver
     runs-on: windows-2022
     steps:
       - name: Checkout
@@ -29,12 +29,17 @@ jobs:
         run: ls "C:\Program Files (x86)\Windows Kits\"
       #- name: Setup WDK
       #  run: C:\"Program Files (x86)"\Windows Kits\10\Vsix\VS2022\10.0.22621.382\WDK.vsix
+      - name: Get PWD/current path
+        run: $SRCPWD=pwd; echo "SRCPWD = $SRCPWD"; echo SRCPWD=$SRCPWD >> $env:GITHUB_ENV
+      - name: Get latest Kit folder
+        run: $regex = '(10).(\d).(\d)+.(\d+)'; $LFOLDER=(ls "C:\Program Files (x86)\Windows Kits\10\bin" | sort Name | select name | Select-String -Pattern $regex).Matches.Value | Select-Object -Last 1; echo "LFOLDER=$LFOLDER" >> $env:GITHUB_ENV
       - name: Check what is in C:\Program Files (x86)\Windows Kits\10\bin
-        run: ls "C:\Program Files (x86)\Windows Kits\10\bin"
+        run: ls "C:\Program Files (x86)\Windows Kits\10\bin\$env:LFOLDER\x64\"
+      - run: ls "C:\Program Files (x86)\Windows Kits\10\bin\$env:LFOLDER\x64\MakeCert.exe"
       - name: Generate self-signed certificate
-        run: C:\Program Files (x86)\Windows Kits\10\bin\MakeCert.exe -r -pe -ss PrivateCertStore -n CN=hubblo.org -eku 1.3.6.1.5.5.7.3.3 ScaphandreDrvTest.cer
-      - run: C:\Program Files (x86)\Windows Kits\10\bin\stampinf.exe -f .\ScaphandreDrv\ScaphandreDrv.inf -d 03/11/2023 -v 0.0.1
-      - run: C:\Program Files (x86)\Windows Kits\10\bin\Inf2Cat.exe /driver:.\ScaphandreDrv\ /os:10_X64  
-      - run: .\signtool.exe sign /v /fd sha256 /s PrivateCertStore /n hubblo.org ".\ScaphandreDrv\scaphandredrv.cat"
-      - run: .\certmgr.exe /add ".\ScaphandreDrv\ScaphandreDrvTest.cer" /s /r localMachine root
-      - run: & "C:\Program Files (x86)\Windows Kits\10\Tools\10.0.22621.0\x64\devcon.exe" install .\ScaphandreDrv.inf root\SCAPHANDREDRV
+        run: $all_args=@('-r','-pe','-ss','PrivateCertStore','-n','CN=hubblo.org','-eku','1.3.6.1.5.5.7.3.3','ScaphandreDrvTest.cer'); & "C:\Program Files (x86)\Windows Kits\10\bin\$env:LFOLDER\x64\MakeCert.exe" $all_args
+      - run: $src_pwd=(echo $env:SRCPWD\ScaphandreDrv\ScaphandreDrv.inf); $all_args=@('-f',$src_pwd,'-d 03/11/2023','-v','0.0.1'); & "C:\Program Files (x86)\Windows Kits\10\bin\$env:LFOLDER\x64\stampinf.exe" $all_args
+      - run: $all_args=@('/driver:.\ScaphandreDrv\' '/os:10_X64'); & "C:\Program Files (x86)\Windows Kits\10\bin\$env:LFOLDER\x64\Inf2Cat.exe" $all_args
+      - run: $all_args=@('sign','/v','/fd','sha256','/s','PrivateCertStore','/n','hubblo.org','.\ScaphandreDrv\scaphandredrv.cat'); & "C:\Program Files (x86)\Windows Kits\10\bin\$env:LFOLDER\x64\signtool.exe" $all_args
+      - run: $all_args=@('/add','.\ScaphandreDrv\ScaphandreDrvTest.cer','/s','/r','localMachine','root'); & "C:\Program Files (x86)\Windows Kits\10\bin\$env:LFOLDER\x64\certmgr.exe" $all_args
+      #- run: & "C:\Program Files (x86)\Windows Kits\10\Tools\10.0.22621.0\x64\devcon.exe" install .\ScaphandreDrv.inf root\SCAPHANDREDRV
