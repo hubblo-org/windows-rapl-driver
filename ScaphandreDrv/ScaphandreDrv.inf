@@ -20,7 +20,7 @@ ScaphandreDrv_Device_CoInstaller_CopyFiles = 11
 1 = %DiskName%,,,""
 
 [SourceDisksFiles]
-ScaphandreDrv.sys  = 1,,
+ScaphandreDrv/ScaphandreDrv.sys  = 1,,
 WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll=1 ; make sure the number matches with SourceDisksNames
 
 ;*****************************************
