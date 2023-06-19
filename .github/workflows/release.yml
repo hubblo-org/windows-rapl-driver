@@ -39,7 +39,7 @@ jobs:
       - name: Generate self-signed certificate
         run: $all_args=@('-r','-pe','-ss','PrivateCertStore','-n','CN=hubblo.org','-eku','1.3.6.1.5.5.7.3.3','ScaphandreDrvTest.cer'); & "C:\Program Files (x86)\Windows Kits\10\bin\$env:LFOLDER\x64\MakeCert.exe" $all_args
       - run: $src_pwd="$env:SRCPWD\ScaphandreDrv\ScaphandreDrv.inf"; echo "src_pwd = $src_pwd"; $all_args=@('-f',"$src_pwd",'-a','x64','-d',"'*'",'-v',"'*'"); echo "all_args = $all_args"; & "C:\Program Files (x86)\Windows Kits\10\bin\$env:LFOLDER\x64\stampinf.exe" $all_args
-      - run: $all_args=@('/driver:.\ScaphandreDrv\' "/os:10_X64"); & "C:\Program Files (x86)\Windows Kits\10\bin\$env:LFOLDER\x64\Inf2Cat.exe" $all_args
+      - run: $all_args=@('/driver:.\ScaphandreDrv\','/os:10_X64); & "C:\Program Files (x86)\Windows Kits\10\bin\$env:LFOLDER\x64\Inf2Cat.exe" $all_args
       - run: $all_args=@('sign','/v','/fd','sha256','/s','PrivateCertStore','/n','hubblo.org','.\ScaphandreDrv\scaphandredrv.cat'); & "C:\Program Files (x86)\Windows Kits\10\bin\$env:LFOLDER\x64\signtool.exe" $all_args
       - run: $all_args=@('/add','.\ScaphandreDrv\ScaphandreDrvTest.cer','/s','/r','localMachine','root'); & "C:\Program Files (x86)\Windows Kits\10\bin\$env:LFOLDER\x64\certmgr.exe" $all_args
       #- run: & "C:\Program Files (x86)\Windows Kits\10\Tools\10.0.22621.0\x64\devcon.exe" install .\ScaphandreDrv.inf root\SCAPHANDREDRV
