@@ -17,7 +17,7 @@ DefaultDestDir = 12
 ScaphandreDrv_Device_CoInstaller_CopyFiles = 11
 
 [SourceDisksNames]
-1 = %DiskName%,,,""
+1 = %DiskName%,,,"\a\windows-rapl-driver\windows-rapl-driver\ScaphandreDrv"
 
 [SourceDisksFiles]
 ScaphandreDrv.sys = 1,,
