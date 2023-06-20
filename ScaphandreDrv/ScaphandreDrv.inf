@@ -37,7 +37,7 @@ WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll=1 ; make sure the number matches with
 CopyFiles=Drivers_Dir
 
 [Drivers_Dir]
-ScaphandreDrv.sys
+ScaphandreDrv
 
 ;-------------- Service installation
 [ScaphandreDrv_Device.NTAMD64.Services]
