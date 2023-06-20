@@ -20,7 +20,7 @@ ScaphandreDrv_Device_CoInstaller_CopyFiles = 11
 1 = %DiskName%,,,""
 
 [SourceDisksFiles]
-ScaphandreDrv.sys  = 1,,
+ScaphandreDrv.sys = 1,,
 WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll=1 ; make sure the number matches with SourceDisksNames
 
 ;*****************************************
@@ -37,7 +37,7 @@ WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll=1 ; make sure the number matches with
 CopyFiles=Drivers_Dir
 
 [Drivers_Dir]
-ScaphandreDrv
+ScaphandreDrv.sys
 
 ;-------------- Service installation
 [ScaphandreDrv_Device.NTAMD64.Services]
