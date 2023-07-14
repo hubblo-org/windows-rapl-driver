@@ -171,15 +171,9 @@ BOOL IsProcessElevated(void)
 
 void _doInstall(void)
 {
-    CHAR pathToExe[MAX_PATH];
     CHAR pathToSys[MAX_PATH];
 
     GetSystemDirectory(pathToSys, MAX_PATH - 1);
-    snprintf(pathToExe, MAX_PATH - 1, "%s\\%s", pathToSys, "bcdedit.exe");
-
-    /* Launch commands to disable Windows signature enforcement */
-    ShellExecute(NULL, "open", pathToExe, "/set testsigning on", NULL, SW_SHOWMINNOACTIVE);
-    ShellExecute(NULL, "open", pathToExe, "/set nointegritychecks on", NULL, SW_SHOWMINNOACTIVE);
 
     srvHandle = GetOrCreateService(scHandle);
     if (srvHandle)

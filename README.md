@@ -17,6 +17,7 @@ For now, the driver is unsigned, so you need to put windows in test mode (allowi
 To do this, open a command prompt **as an administrator** and run :
 
 	bcdedit.exe -set TESTSIGNING ON
+	bcdedit.exe -set nointegritychecks on
 
 Then restart the computer or server.
 
