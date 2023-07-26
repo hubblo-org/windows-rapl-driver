@@ -4,12 +4,12 @@
 
 [Version]
 Signature="$WINDOWS NT$"
-Class=System ; TODO: specify appropriate Class
-ClassGuid={4d36e97d-e325-11ce-bfc1-08002be10318} ; TODO: specify appropriate ClassGuid
+Class=System
+ClassGuid={4d36e97d-e325-11ce-bfc1-08002be10318}
 Provider=%ManufacturerName%
 CatalogFile=ScaphandreDrv.cat
 CatalogFile.NTAMD64=ScaphandreDrv.cat
-DriverVer = 03/11/2023,0.0.1.0
+DriverVer = 07/01/2023,0.0.1.0
 PnpLockdown=1
 
 [DestinationDirs]
@@ -17,7 +17,7 @@ DefaultDestDir = 12
 ScaphandreDrv_Device_CoInstaller_CopyFiles = 11
 
 [SourceDisksNames]
-1 = %DiskName%,,,"\a\windows-rapl-driver\windows-rapl-driver\ScaphandreDrv"
+1 = %DiskName%,,,""
 
 [SourceDisksFiles]
 ScaphandreDrv.sys = 1,,
@@ -54,7 +54,7 @@ ServiceBinary  = %12%\ScaphandreDrv.sys
 
 [Strings]
 SPSVCINST_ASSOCSERVICE= 0x00000002
-ManufacturerName="Hubblo" ;TODO: Replace with your manufacturer name
+ManufacturerName="Hubblo"
 DiskName = "ScaphandreDrv Installation Disk"
 ScaphandreDrv.DeviceDesc = "ScaphandreDrv Device"
 ScaphandreDrv.SVCDESC = "ScaphandreDrv Service"

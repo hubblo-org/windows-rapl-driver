@@ -27,6 +27,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_1766CA09DBCF4911B8FE745C543AFF26"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_26812338353A47C88F660B3983088BDC"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_2F1BA982D8054BA2B7ABA2376CAD1B65"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -51,6 +63,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_4B6FE3C6BF5449A5A29DCE6548897CA3"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_5289390E5481A88B37E89CFD3D1FC3AD"
         "OwnerKey" = "8:_1482B00D2D3146CB8ADCBE420DA96227"
         "MsmSig" = "8:_UNDEFINED"
@@ -59,6 +77,12 @@
         {
         "MsmKey" = "8:_5289390E5481A88B37E89CFD3D1FC3AD"
         "OwnerKey" = "8:_48EC5EC0EB314B0C94CFBB0812BD157E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6278190BD21D402E9C96B4FD0BB673A4"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -107,6 +131,12 @@
         {
         "MsmKey" = "8:_BD6B58732F629FD84395C8D185EF4D43"
         "OwnerKey" = "8:_83937185D63A42B49D512494B026A7E7"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_ED0D5130DC214C21B039D2731DFDFE89"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -209,6 +239,20 @@
             "InstallerClass" = "11:FALSE"
             "CustomActionData" = "8:"
             }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_CE386A1FB052429D99BFA5C54FDE6304"
+            {
+            "Name" = "8:DriverLoader.exe"
+            "Condition" = "8:"
+            "Object" = "8:_ED0D5130DC214C21B039D2731DFDFE89"
+            "FileType" = "3:2"
+            "InstallAction" = "3:1"
+            "Arguments" = "8:start"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:2"
+            "Identifier" = "8:_35452EBE_231A_4A30_ADAA_439284DD57CA"
+            "InstallerClass" = "11:FALSE"
+            "CustomActionData" = "8:"
+            }
             "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_F7401B7314914FBA8170B8938B0965F4"
             {
             "Name" = "8:Stop_Service"
@@ -256,6 +300,46 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1766CA09DBCF4911B8FE745C543AFF26"
+            {
+            "SourcePath" = "8:..\\..\\scaphandre\\docs_src\\scaphandre.ico"
+            "TargetName" = "8:scaphandre.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_86D7162CBDCE4757B4EC554AE369FC75"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_26812338353A47C88F660B3983088BDC"
+            {
+            "SourcePath" = "8:..\\..\\scaphandre\\CHANGELOG.md"
+            "TargetName" = "8:CHANGELOG.md"
+            "Tag" = "8:"
+            "Folder" = "8:_86D7162CBDCE4757B4EC554AE369FC75"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2F1BA982D8054BA2B7ABA2376CAD1B65"
@@ -318,6 +402,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4B6FE3C6BF5449A5A29DCE6548897CA3"
+            {
+            "SourcePath" = "8:..\\..\\scaphandre\\target\\release\\scaphandre.exe"
+            "TargetName" = "8:scaphandre.exe"
+            "Tag" = "8:"
+            "Folder" = "8:_86D7162CBDCE4757B4EC554AE369FC75"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5289390E5481A88B37E89CFD3D1FC3AD"
             {
             "SourcePath" = "8:ntoskrnl.exe"
@@ -336,6 +440,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6278190BD21D402E9C96B4FD0BB673A4"
+            {
+            "SourcePath" = "8:..\\..\\scaphandre\\LICENSE"
+            "TargetName" = "8:LICENSE"
+            "Tag" = "8:"
+            "Folder" = "8:_86D7162CBDCE4757B4EC554AE369FC75"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_87322E34A682EAA5A3C658B5E58AEA74"
@@ -478,6 +602,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ED0D5130DC214C21B039D2731DFDFE89"
+            {
+            "SourcePath" = "8:..\\ScaphandreDrv\\DriverLoader.exe"
+            "TargetName" = "8:DriverLoader.exe"
+            "Tag" = "8:"
+            "Folder" = "8:_86D7162CBDCE4757B4EC554AE369FC75"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
@@ -557,7 +701,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ScaphandreDrvInstaller"
         "ProductCode" = "8:{FCD381FF-BFF7-4AFF-8188-0D9A48DB02DA}"
-        "PackageCode" = "8:{743D7B25-9931-47D0-AD31-BADB26134D00}"
+        "PackageCode" = "8:{4E618982-19F9-451C-A225-B2858DA890EE}"
         "UpgradeCode" = "8:{9FD573E3-4647-43F3-AE59-403AD85B1689}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
