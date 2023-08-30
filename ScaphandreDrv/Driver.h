@@ -29,6 +29,11 @@ DRIVER_INITIALIZE DriverEntry;
 
 EXTERN_C_END
 
+struct data {
+    UINT32 msrRegister;
+    UINT32 cpuIndex;
+};
+
 void DriverUnload(PDRIVER_OBJECT driver);
 NTSTATUS DispatchCreate(PDEVICE_OBJECT device, PIRP irp);
 NTSTATUS DispatchClose(PDEVICE_OBJECT device, PIRP irp);

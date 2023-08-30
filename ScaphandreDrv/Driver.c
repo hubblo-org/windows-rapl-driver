@@ -6,16 +6,13 @@
 #pragma alloc_text (INIT, DriverEntry)
 #endif
 
-NTSTATUS
-DriverEntry(
-    _In_ PDRIVER_OBJECT  DriverObject,
-    _In_ PUNICODE_STRING RegistryPath
-    )
+NTSTATUS DriverEntry(PDRIVER_OBJECT  DriverObject,
+                     PUNICODE_STRING RegistryPath)
 {
-    NTSTATUS status;
     PDEVICE_OBJECT device_object;
     UNICODE_STRING device_name;
     UNICODE_STRING sym_name;
+    NTSTATUS status;
 
     DbgPrint("Registry path address: %p\n", RegistryPath);
 
@@ -55,14 +52,16 @@ NTSTATUS DispatchCreate(PDEVICE_OBJECT device, PIRP irp)
     memset(manufacturer, 0, sizeof(manufacturer));
     __cpuid(cpu_regs, 0);
     memcpy(manufacturer, &cpu_regs[1], sizeof(unsigned __int32));
-    memcpy(manufacturer + sizeof(unsigned __int32), &cpu_regs[3], sizeof(unsigned __int32));
-    memcpy(manufacturer + 2 * sizeof(unsigned __int32), &cpu_regs[2], sizeof(unsigned __int32));
+    memcpy(manufacturer + sizeof(unsigned __int32), &cpu_regs[3],
+           sizeof(unsigned __int32));
+    memcpy(manufacturer + 2 * sizeof(unsigned __int32), &cpu_regs[2],
+           sizeof(unsigned __int32));
 
-    if (strncmp(manufacturer, "GenuineIntel", sizeof(manufacturer) - 1) == 0)
+    if (!strncmp(manufacturer, "GenuineIntel", sizeof(manufacturer) - 1))
         machine_type = E_MACHINE_INTEL;
-    else if (strncmp(manufacturer, "AMDisbetter!", sizeof(manufacturer) - 1) == 0)
+    else if (!strncmp(manufacturer, "AMDisbetter!", sizeof(manufacturer) - 1))
         machine_type = E_MACHINE_AMD;
-    else if (strncmp(manufacturer, "AuthenticAMD", sizeof(manufacturer) - 1) == 0)
+    else if (!strncmp(manufacturer, "AuthenticAMD", sizeof(manufacturer) - 1))
         machine_type = E_MACHINE_AMD;
     else
         machine_type = E_MACHINE_UNK;
@@ -96,44 +95,60 @@ NTSTATUS DispatchCleanup(PDEVICE_OBJECT device, PIRP irp)
 
 NTSTATUS DispatchDeviceControl(PDEVICE_OBJECT device, PIRP irp)
 {
-    NTSTATUS ntStatus;
-    UINT32 msrRegister;
-    ULONG inputBufferLength;
-    ULONG outputBufferLength;
+    GROUP_AFFINITY affinity, old;
+    PIO_STACK_LOCATION stackLoc;
+    PROCESSOR_NUMBER pnumber;
     ULONGLONG msrResult;
-    PIO_STACK_LOCATION stackLocation;
+    NTSTATUS ntStatus;
+    struct data data;
+    size_t inLength;
 
-    stackLocation = irp->Tail.Overlay.CurrentStackLocation;
-    inputBufferLength = stackLocation->Parameters.DeviceIoControl.InputBufferLength;
-    outputBufferLength = stackLocation->Parameters.DeviceIoControl.OutputBufferLength;
+    stackLoc = irp->Tail.Overlay.CurrentStackLocation;
+    inLength = stackLoc->Parameters.DeviceIoControl.InputBufferLength;
 
     DbgPrint("Received event for driver %s... \n", device->DriverObject->DriverName);
 
-    /* METHOD_BUFFERED */
-    if (inputBufferLength == sizeof(ULONGLONG))
-    {
-        /* MSR register codes provided by userland must not exceed 8 bytes */
-        memcpy(&msrRegister, irp->AssociatedIrp.SystemBuffer, sizeof(ULONGLONG));
-        if (validate_msr_lookup(msrRegister) != 0)
-        {
-            DbgPrint("Requested MSR register (%08x) access is not allowed!\n", msrRegister);
-            ntStatus = STATUS_INVALID_DEVICE_REQUEST;
-        }
-        else
-        {
-            /* Call readmsr instruction */
-            msrResult = __readmsr(msrRegister);
-            memcpy(irp->AssociatedIrp.SystemBuffer, &msrResult, sizeof(ULONGLONG));
-            ntStatus = STATUS_SUCCESS;
-            irp->IoStatus.Information = sizeof(ULONGLONG);
-        }
-    }
-    else
-    {
-        DbgPrint("Bad input length provided. Expected %u bytes, got %u.\n", sizeof(ULONGLONG), inputBufferLength);
+    if (inLength != sizeof(data)) {
+        DbgPrint("Bad input length provided. Expected %zu bytes, got %zu.\n",
+                 sizeof(data), inLength);
         ntStatus = STATUS_INVALID_DEVICE_REQUEST;
+        goto error;
     }
 
+    /* Convert input data into structure */
+    memcpy(&data, irp->AssociatedIrp.SystemBuffer, sizeof(data));
+    if (validate_msr_lookup(data.msrRegister) != 0)
+    {
+        DbgPrint("Requested MSR register (%04x) access is not allowed!\n",
+                 data.msrRegister);
+        ntStatus = STATUS_INVALID_DEVICE_REQUEST;
+        goto error;
+    }
+
+    /* Run code on the specified socket */
+    if ((ntStatus = KeGetProcessorNumberFromIndex(data.cpuIndex, &pnumber))
+        != STATUS_SUCCESS) {
+        DbgPrint("Failed to get processor info!\n");
+        goto error;
+    }
+
+    /* Set affinity */
+    memset(&affinity, 0, sizeof(GROUP_AFFINITY));
+    affinity.Group = pnumber.Group;
+    KeSetSystemGroupAffinityThread(&affinity, &old);
+
+    /* Call readmsr instruction */
+    msrResult = __readmsr(data.msrRegister);
+
+    /* Restore affinity */
+    KeRevertToUserGroupAffinityThread(&old);
+
+    /* Save result */
+    memcpy(irp->AssociatedIrp.SystemBuffer, &msrResult, sizeof(data));
+    irp->IoStatus.Information = sizeof(data);
+    ntStatus = STATUS_SUCCESS;
+
+error:
     irp->IoStatus.Status = ntStatus;
     IofCompleteRequest(irp, IO_NO_INCREMENT);
 
