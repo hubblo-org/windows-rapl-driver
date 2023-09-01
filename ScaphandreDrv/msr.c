@@ -25,6 +25,8 @@ int validate_msr_lookup(unsigned __int64 msrRegister)
                 case MSR_PP1_POWER_LIMIT:
                 case MSR_PP1_ENERGY_STATUS:
                 case MSR_PP1_POLICY:
+                case MSR_PLATFORM_ENERGY_STATUS:
+                case MSR_PLATFORM_POWER_LIMIT:
                     err = 0;
                     break;
 
