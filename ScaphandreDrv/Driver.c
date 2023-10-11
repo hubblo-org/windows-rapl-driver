@@ -147,6 +147,7 @@ NTSTATUS DispatchDeviceControl(PDEVICE_OBJECT device, PIRP irp)
         /* Set affinity */
         memset(&affinity, 0, sizeof(GROUP_AFFINITY));
         affinity.Group = pnumber.Group;
+        affinity.Mask = data.cpuIndex;
         KeSetSystemGroupAffinityThread(&affinity, &old);
 
         /* Call readmsr instruction */
