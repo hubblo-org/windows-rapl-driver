@@ -133,7 +133,10 @@ NTSTATUS DispatchDeviceControl(PDEVICE_OBJECT device, PIRP irp)
      */
     data.cpuIndex = (data.cpuIndex >= max_processors) ? (max_processors - 1) : data.cpuIndex;
 
-    /* Run code on the specified socket */
+    /* Run code on the specified socket
+     * MSDN says: 'Systems with fewer than 64 logical processors always have a single group, Group 0.'
+     * https://learn.microsoft.com/en-us/windows/win32/procthread/processor-groups
+     */
     if ((ntStatus = KeGetProcessorNumberFromIndex(data.cpuIndex, &pnumber))
         != STATUS_SUCCESS) {
         DbgPrint("Failed to get processor info!\n");
