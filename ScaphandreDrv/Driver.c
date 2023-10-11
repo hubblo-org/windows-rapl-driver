@@ -143,16 +143,22 @@ NTSTATUS DispatchDeviceControl(PDEVICE_OBJECT device, PIRP irp)
         goto error;
     }
 
-    /* Set affinity */
-    memset(&affinity, 0, sizeof(GROUP_AFFINITY));
-    affinity.Group = pnumber.Group;
-    KeSetSystemGroupAffinityThread(&affinity, &old);
+    try {
+        /* Set affinity */
+        memset(&affinity, 0, sizeof(GROUP_AFFINITY));
+        affinity.Group = pnumber.Group;
+        KeSetSystemGroupAffinityThread(&affinity, &old);
 
-    /* Call readmsr instruction */
-    msrResult = __readmsr(data.msrRegister);
+        /* Call readmsr instruction */
+        msrResult = __readmsr(data.msrRegister);
 
-    /* Restore affinity */
-    KeRevertToUserGroupAffinityThread(&old);
+        /* Restore affinity */
+        KeRevertToUserGroupAffinityThread(&old);
+    }
+    except (EXCEPTION_EXECUTE_HANDLER) {
+        ntStatus = STATUS_IO_DEVICE_ERROR;
+        goto error;
+    }
 
     /* Save result */
     memcpy(irp->AssociatedIrp.SystemBuffer, &msrResult, sizeof(data));
