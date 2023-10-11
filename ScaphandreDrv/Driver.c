@@ -66,6 +66,9 @@ NTSTATUS DispatchCreate(PDEVICE_OBJECT device, PIRP irp)
     else
         machine_type = E_MACHINE_UNK;
 
+    /* Get the number of virtual processors */
+    max_processors = KeQueryMaximumProcessorCountEx(ALL_PROCESSOR_GROUPS);
+
     irp->IoStatus.Status = STATUS_SUCCESS;
     irp->IoStatus.Information = STATUS_SUCCESS;
     IofCompleteRequest(irp, IO_NO_INCREMENT);
@@ -124,6 +127,11 @@ NTSTATUS DispatchDeviceControl(PDEVICE_OBJECT device, PIRP irp)
         ntStatus = STATUS_INVALID_DEVICE_REQUEST;
         goto error;
     }
+
+    /* Check the requested CPU index is not above the maximum CPU available
+     * Otherwise, cap to max_processors - 1
+     */
+    data.cpuIndex = (data.cpuIndex >= max_processors) ? (max_processors - 1) : data.cpuIndex;
 
     /* Run code on the specified socket */
     if ((ntStatus = KeGetProcessorNumberFromIndex(data.cpuIndex, &pnumber))

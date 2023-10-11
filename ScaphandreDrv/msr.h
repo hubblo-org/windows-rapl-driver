@@ -40,6 +40,7 @@ typedef enum {
 
 
 static e_machine_type machine_type;
+static unsigned long max_processors;
 
 int validate_msr_lookup(unsigned __int64 msrRegister);
 
