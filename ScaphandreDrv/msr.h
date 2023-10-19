@@ -28,6 +28,9 @@
 #define MSR_AMD_CORE_ENERGY_STATUS  0xc001029a
 #define MSR_AMD_PKG_ENERGY_STATUS   0xc001029b
 
+#define MSR_PLATFORM_ENERGY_STATUS 0x0000064d
+#define MSR_PLATFORM_POWER_LIMIT 0x0000065c
+
 
 typedef enum {
     E_MACHINE_INTEL,
@@ -37,6 +40,7 @@ typedef enum {
 
 
 static e_machine_type machine_type;
+static unsigned long max_processors;
 
 int validate_msr_lookup(unsigned __int64 msrRegister);
 
