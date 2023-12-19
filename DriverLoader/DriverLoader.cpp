@@ -189,8 +189,6 @@ void _doInstall(void)
         MessageBox(NULL, message, "Error", MB_OK | MB_ICONERROR);
         ExitProcess(ERROR_SERVICE_CREATE_FAILED);
     }
-
-    snprintf(message, sizeof(message) - 1, "%s successfully created and installed!. The computer must be restarted in order to activate the service.", SERVICE_DESC);
-    MessageBox(NULL, message, "Success", MB_OK | MB_ICONINFORMATION);
+    
     ExitProcess(ERROR_SERVICE_OK);
 }
