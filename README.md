@@ -237,3 +237,9 @@ build in release mode then retry !
 "F:\Windows Kits\10\bin\x86\Inf2Cat.exe" /driver:c:\Users\nulse\Documents\GitHub\test\ /os:10_19H1_X64,10_RS5_X64,ServerRS5_X64,10_RS4_X64
 
 see https://docs.microsoft.com/en-us/windows-hardware/drivers/devtest/inf2cat
+
+### Impossible to reinstall a new version of the driver even if the previous one seems absent
+
+driverquery doesn't show any trace of a previous version of the driver but you gert an error 1078 when trying to install a new one with DriverLoader.exe
+Enusre you don't see Scaphandre service in services.msc, ensure you have uninstalled the full package in Add or Remove Programs
+If nothing does the trick, then remove the remaining Registry entry that has the name of the service, in HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services (see https://social.msdn.microsoft.com/Forums/windowsdesktop/en-US/ed214b30-b094-43c0-85e8-4702da85b5dd/add-service-failed-to-create-service?forum=wdk)
