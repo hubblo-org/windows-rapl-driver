@@ -6,6 +6,8 @@
 #pragma alloc_text (INIT, DriverEntry)
 #endif
 
+e_machine_type machine_type;
+
 NTSTATUS DriverEntry(PDRIVER_OBJECT  DriverObject,
                      PUNICODE_STRING RegistryPath)
 {
