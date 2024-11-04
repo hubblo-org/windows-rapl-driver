@@ -38,7 +38,7 @@ You need those files in the same folder.
 Then run, in an adminstrator command prompt :
 
 	DriverLoader.exe install
-	
+
 Start the service :
 
 	DriverLoader.exe start
@@ -120,29 +120,29 @@ If the ScaphandreDrvInstaller project is displayed as incompatible, right click,
 In C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64
 
 	.\MakeCert.exe -r -pe -ss PrivateCertStore -n CN=hubblo.org -eku 1.3.6.1.5.5.7.3.3 ScaphandreDrvTest.cer
-	
+
 In C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x86, when you already have an Inf file
 
-	.\stampinf.exe -f C:\Users\bpeti\source\repos\windows-rapl-driver\ScaphandreDrv\ScaphandreDrv.inf -d 03/11/2023 -v 0.0.1
-	
+	.\stampinf.exe -f C:\Users\MYUSER\source\repos\windows-rapl-driver\ScaphandreDrv\ScaphandreDrv.inf -d 03/11/2023 -v 0.0.1
+
 Then (need to change inf file to succeed with x64, TODO document this part)
 
-	.\Inf2Cat.exe /driver:C:\Users\bpeti\source\repos\windows-rapl-driver\ScaphandreDrv\ /os:10_X64
+	.\Inf2Cat.exe /driver:C:\Users\MYUSER\source\repos\windows-rapl-driver\ScaphandreDrv\ /os:10_X64
 
 Then
 
-	.\signtool.exe sign /v /fd sha256 /s PrivateCertStore /n hubblo.org "C:\Users\bpeti\source\repos\windows-rapl-driver\ScaphandreDrv\scaphandredrv.cat"
-	
+	.\signtool.exe sign /v /fd sha256 /s PrivateCertStore /n hubblo.org "C:\Users\MYUSER\source\repos\windows-rapl-driver\ScaphandreDrv\scaphandredrv.cat"
+
 Then (as Administrator)
 
-	.\certmgr.exe /add "C:\Users\bpeti\source\repos\windows-rapl-driver\ScaphandreDrv\ScaphandreDrvTest.cer" /s /r localMachine root
-	
+	.\certmgr.exe /add "C:\Users\MYUSER\source\repos\windows-rapl-driver\ScaphandreDrv\ScaphandreDrvTest.cer" /s /r localMachine root
+
 Once the signing is proper, you should be able to install the driver with :
 
 	& "C:\Program Files (x86)\Windows Kits\10\Tools\10.0.22621.0\x64\devcon.exe" install .\ScaphandreDrv.inf root\SCAPHANDREDRV
-	
+
 If the signature is okay (even if untrusted), you should get this pop up window :
-	
+
 ![unknown_publisher](https://user-images.githubusercontent.com/906428/224494859-a9a7f2f1-2152-4487-99ff-6daa963195a8.png)
 
 ## Context
@@ -150,6 +150,97 @@ If the signature is okay (even if untrusted), you should get this pop up window 
 This driver has been developped for a specific use case : enabling [Scaphandre](https://github.com/hubblo-org/scaphandre) on Windows.
 
 Please have a look at [those slides](https://github.com/hubblo-org/scaphandre/files/8601923/Boavizta.-.Scaphandre_RAPL_Windows.pdf) for a better understanding of how and why this driver has been developped.
+
+## How to sign the driver (MS validated, avoiding test-mode)
+
+### Overall process
+
+1. Obtain an EV (extended validation) code signing certificate
+  1. ex: ssl.com # TODO document process, you need either a letter from a law firm to authenticate the structure, or follow the validation process of a third party, Google Business for example. The Google process did not work on my smartphone, so I went through a law firm.
+2. Create or use an Azure account with the Global Administrator account of the Azure AD domain / Entra ID (default if user creator of the Azure account)
+3. Register on the [Hardware Partner Program](https://partner.microsoft.com/en-US/dashboard/Registration/Hardware?step=AccountDetails)
+4. Check that the EV certificate is registered on the Partner Center (in “Manage Certificates”). Otherwise follow the procedure for downloading + signing + uploading a test file.
+5. Download a Virtual HLK (virtual machine or app for physical machine) Controller, be careful to choose exactly the version compatible with the target test machine (example: Windows 10 22H2): [https://learn.microsoft.com/fr-fr/windows-hardware/test/hlk/](https://learn.microsoft.com/fr-fr/windows-hardware/test/hlk/), install the controller and make it accessible on the network
+6. Associate a test machine to the controller by installing the HLK Client made available on the network by the controller, on the test machine
+7. In HLK Studio
+  1. Create a machine pool, put the discovered test machine there
+  2. Create a project
+  3. In Selection, select the machine pool, then in software device, find the .sys driver
+  4. In Tests check the tests available for this driver, load a test playlist if necessary
+  5. Launch Run Selected
+  6. In HLK Manager check that the test machine is Ready or Running and has jobs scheduled, check that it runs them (it restarts several times with login on a user of service)
+  7. In Results, check that everything is green, or go see the logs
+  8. In Package, add the driver folder (this must contain the .sys, the .inf and the .cat imperatively), sign if you can do it directly with the EV certificate. This is not possible with ssl.com which keeps the private key and requires going through yubikey or its cloud signature service. Choose to make the hlkx package without signing in this case.
+  9. Add symbols: right click on the folder line in the Package tab, then Add symbols and go to find the .pdb file from the Visual Studio build
+8. HLKX signature: this is theoretically possible with HLK Studio, but it does not work with SSL.com keys
+  1. Make sure you have included the key via ssl.com CKA in the local store, download CKA, then authenticate: https://www.ssl.com/download/ssl-com-esigner-cka
+  2. Download HLKSignTool from ssl.com: https://www.ssl.com/download/hlksigntool/
+  3. Once unzipped, use the binary in powershell: & "C:\Users\MYUSER\Downloads\HLKSignTool_v1.0\HLKSignTool.exe" SerialNumberDeMaClef "C:\Users\MYUSER\VirtualBox VMs\shared\ScaphandreDriver_withsymbols.hlkx"
+  4. Have your phone on hand for the OTP
+
+#### Sources
+
+- https://learn.microsoft.com/fr-fr/windows-hardware/drivers/dashboard/get-started-dashboard-submissions
+- https://learn.microsoft.com/fr-fr/windows-hardware/drivers/dashboard/get-started-dashboard-submissions#step-4-submit-for-certification-and-compatibility
+
+### Virtual HLK and HLK Studio
+
+For Windows 11 and + compatible versions, the admin account is HLKAdminUser with the password set at startup. For previous versions, it is HLKAdminUser / Testpassword,1.
+
+We download a vhdx, which can only be used in Hyper-V. If you don't have Hyper-V compatible Windows, you have to convert it to vhd or vdi for use in virtual box
+
+```
+.\VBoxManage.exe clonemedium disk "C:\Users\MYUSER\Downloads\2019DC-22621.1.ni_release.220506-1250-HLK.vhdx" "C:\Users\MYUSER\Downloads\2019DC-22621.1.ni_release.220506-1250-HLK.vhd" --format vhd
+```
+
+Change the network interface in Virtual Box from NAT to Bridged Interface, then accept the discovery on the network from the windows guest.
+
+## Setup of a VHLK as controller and HLK Client on a test machine
+
+Remember to enable network discovery mode:
+`Control Panel > Network and Internet > Network and Sharing center > Advanced Sharing Settings`
+Then click on Turn on network discovery, then Save changes
+
+If it does not work (if when reopening this panel the button is still on “Turn off”, follow this procedure: https://learn.microsoft.com/en-us/troubleshoot/windows-client/networking/cannot-turn-on-network-discovery
+
+More precisely, open Run and launch services.msc if one of the services mentioned in the doc is not started: right click, mode: manual, apply, start
+
+> Make sure that the following dependency services are started:
+>
+> DNS Client
+>
+> Function Discovery Resource Publication
+>
+> SSDP Discovery
+>
+> UPnP Device Host
+>
+> Configure the Windows firewall to allow Network Discovery by following these steps:
+>
+> Open Control Panel, select System and Security, and then select Windows Firewall.
+>
+> In the left pane, select Allow an app or feature
+>
+> Open Control Panel, select System and Security, and then select Windows Firewall.
+>
+> In the left pane, select Allow an app or feature through Windows Firewall.
+>
+> Select Change settings. If you're prompted for an administrator password or confirmation, enter the password or provide confirmation.
+>
+> Select Network discovery, and then select OK.
+>
+> Configure other firewalls in the network to allow Network Discovery.
+>
+> Turn on Network Discovery in Network and Sharing Center.
+
+Sources
+
+- https://learn.microsoft.com/fr-fr/windows-hardware/drivers/dashboard/hardware-submission-create
+
+TODO Automating the process :
+- https://learn.microsoft.com/fr-fr/windows-hardware/test/hlk/user/hck-testing-concepts#how-it-works
+- https://learn.microsoft.com/fr-fr/windows-hardware/test/hlk/developer/hlk-developer-guide
+- https://learn.microsoft.com/fr-fr/windows-hardware/test/hlk/user/hlk-automation-tool
 
 ## Cross compilation MinGW (OUTDATED)
 
