@@ -156,27 +156,27 @@ Please have a look at [those slides](https://github.com/hubblo-org/scaphandre/fi
 ### Overall process
 
 1. Obtain an EV (extended validation) code signing certificate
-  1. ex: ssl.com # TODO document process, you need either a letter from a law firm to authenticate the structure, or follow the validation process of a third party, Google Business for example. The Google process did not work on my smartphone, so I went through a law firm.
+  a. ex: ssl.com # TODO document process, you need either a letter from a law firm to authenticate the structure, or follow the validation process of a third party, Google Business for example. The Google process did not work on my smartphone, so I went through a law firm.
 2. Create or use an Azure account with the Global Administrator account of the Azure AD domain / Entra ID (default if user creator of the Azure account)
 3. Register on the [Hardware Partner Program](https://partner.microsoft.com/en-US/dashboard/Registration/Hardware?step=AccountDetails)
 4. Check that the EV certificate is registered on the Partner Center (in “Manage Certificates”). Otherwise follow the procedure for downloading + signing + uploading a test file.
 5. Download a Virtual HLK (virtual machine or app for physical machine) Controller, be careful to choose exactly the version compatible with the target test machine (example: Windows 10 22H2): [https://learn.microsoft.com/fr-fr/windows-hardware/test/hlk/](https://learn.microsoft.com/fr-fr/windows-hardware/test/hlk/), install the controller and make it accessible on the network
 6. Associate a test machine to the controller by installing the HLK Client made available on the network by the controller, on the test machine
 7. In HLK Studio
-  1. Create a machine pool, put the discovered test machine there
-  2. Create a project
-  3. In Selection, select the machine pool, then in software device, find the .sys driver
-  4. In Tests check the tests available for this driver, load a test playlist if necessary
-  5. Launch Run Selected
-  6. In HLK Manager check that the test machine is Ready or Running and has jobs scheduled, check that it runs them (it restarts several times with login on a user of service)
-  7. In Results, check that everything is green, or go see the logs
-  8. In Package, add the driver folder (this must contain the .sys, the .inf and the .cat imperatively), sign if you can do it directly with the EV certificate. This is not possible with ssl.com which keeps the private key and requires going through yubikey or its cloud signature service. Choose to make the hlkx package without signing in this case.
-  9. Add symbols: right click on the folder line in the Package tab, then Add symbols and go to find the .pdb file from the Visual Studio build
+  a. Create a machine pool, put the discovered test machine there
+  b. Create a project
+  c. In Selection, select the machine pool, then in software device, find the .sys driver
+  d. In Tests check the tests available for this driver, load a test playlist if necessary
+  e. Launch Run Selected
+  f. In HLK Manager check that the test machine is Ready or Running and has jobs scheduled, check that it runs them (it restarts several times with login on a user of service)
+  g. In Results, check that everything is green, or go see the logs
+  h. In Package, add the driver folder (this must contain the .sys, the .inf and the .cat imperatively), sign if you can do it directly with the EV certificate. This is not possible with ssl.com which keeps the private key and requires going through yubikey or its cloud signature service. Choose to make the hlkx package without signing in this case.
+  i. Add symbols: right click on the folder line in the Package tab, then Add symbols and go to find the .pdb file from the Visual Studio build
 8. HLKX signature: this is theoretically possible with HLK Studio, but it does not work with SSL.com keys
-  1. Make sure you have included the key via ssl.com CKA in the local store, download CKA, then authenticate: https://www.ssl.com/download/ssl-com-esigner-cka
-  2. Download HLKSignTool from ssl.com: https://www.ssl.com/download/hlksigntool/
-  3. Once unzipped, use the binary in powershell: & "C:\Users\MYUSER\Downloads\HLKSignTool_v1.0\HLKSignTool.exe" KeySerialNumber "C:\Users\MYUSER\VirtualBox VMs\shared\ScaphandreDriver_withsymbols.hlkx"
-  4. Have your phone on hand for the OTP
+  a. Make sure you have included the key via ssl.com CKA in the local store, download CKA, then authenticate: https://www.ssl.com/download/ssl-com-esigner-cka
+  b. Download HLKSignTool from ssl.com: https://www.ssl.com/download/hlksigntool/
+  c. Once unzipped, use the binary in powershell: & "C:\Users\MYUSER\Downloads\HLKSignTool_v1.0\HLKSignTool.exe" KeySerialNumber "C:\Users\MYUSER\VirtualBox VMs\shared\ScaphandreDriver_withsymbols.hlkx"
+  d. Have your phone on hand for the OTP
 
 #### Sources
 
