@@ -195,7 +195,7 @@ We download a vhdx, which can only be used in Hyper-V. If you don't have Hyper-V
 
 Change the network interface in Virtual Box from NAT to Bridged Interface, then accept the discovery on the network from the windows guest.
 
-## Setup of a VHLK as controller and HLK Client on a test machine
+### Setup of a VHLK as controller and HLK Client on a test machine
 
 Remember to enable network discovery mode:
 `Control Panel > Network and Internet > Network and Sharing center > Advanced Sharing Settings`
@@ -207,31 +207,21 @@ More precisely, open Run and launch services.msc if one of the services mentione
 
 > Make sure that the following dependency services are started:
 >
-> DNS Client
->
-> Function Discovery Resource Publication
->
-> SSDP Discovery
->
-> UPnP Device Host
+> - DNS Client
+> - Function Discovery Resource Publication
+> - SSDP Discovery
+> - UPnP Device Host
 >
 > Configure the Windows firewall to allow Network Discovery by following these steps:
 >
-> Open Control Panel, select System and Security, and then select Windows Firewall.
->
-> In the left pane, select Allow an app or feature
->
-> Open Control Panel, select System and Security, and then select Windows Firewall.
->
-> In the left pane, select Allow an app or feature through Windows Firewall.
->
-> Select Change settings. If you're prompted for an administrator password or confirmation, enter the password or provide confirmation.
->
-> Select Network discovery, and then select OK.
->
-> Configure other firewalls in the network to allow Network Discovery.
->
-> Turn on Network Discovery in Network and Sharing Center.
+> - Open Control Panel, select System and Security, and then select Windows Firewall.
+> - In the left pane, select Allow an app or feature
+> - Open Control Panel, select System and Security, and then select Windows Firewall.
+> - In the left pane, select Allow an app or feature through Windows Firewall.
+> - Select Change settings. If you're prompted for an administrator password or confirmation, enter the password or provide confirmation.
+> - Select Network discovery, and then select OK.
+> - Configure other firewalls in the network to allow Network Discovery.
+> - Turn on Network Discovery in Network and Sharing Center.
 
 Sources
 
