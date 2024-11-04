@@ -175,7 +175,7 @@ Please have a look at [those slides](https://github.com/hubblo-org/scaphandre/fi
 8. HLKX signature: this is theoretically possible with HLK Studio, but it does not work with SSL.com keys
   1. Make sure you have included the key via ssl.com CKA in the local store, download CKA, then authenticate: https://www.ssl.com/download/ssl-com-esigner-cka
   2. Download HLKSignTool from ssl.com: https://www.ssl.com/download/hlksigntool/
-  3. Once unzipped, use the binary in powershell: & "C:\Users\MYUSER\Downloads\HLKSignTool_v1.0\HLKSignTool.exe" SerialNumberDeMaClef "C:\Users\MYUSER\VirtualBox VMs\shared\ScaphandreDriver_withsymbols.hlkx"
+  3. Once unzipped, use the binary in powershell: & "C:\Users\MYUSER\Downloads\HLKSignTool_v1.0\HLKSignTool.exe" KeySerialNumber "C:\Users\MYUSER\VirtualBox VMs\shared\ScaphandreDriver_withsymbols.hlkx"
   4. Have your phone on hand for the OTP
 
 #### Sources
